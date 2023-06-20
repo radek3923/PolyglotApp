@@ -32,6 +32,9 @@ public class ChooseGameFragment extends Fragment {
 
         binding.flashcardsTextView.setOnClickListener(view1 -> {
             System.out.println("Przenoszę do fiszek");
+            NavHostFragment.findNavController(ChooseGameFragment.this)
+                    .navigate(R.id.action_ChooseGameFragment_to_FlashcardsFragment);
+
         });
 
         binding.quizTextView.setOnClickListener(view1 -> {
@@ -42,7 +45,7 @@ public class ChooseGameFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(ChooseGameFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
+                        .navigate(R.id.action_ChooseGameFragment_to_ChooseLanguageFragment);
             }
         });
     }

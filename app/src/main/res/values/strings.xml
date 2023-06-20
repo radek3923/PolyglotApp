@@ -2,19 +2,16 @@
     <string name="app_name">PolyglotApp</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="choose_language_fragment_label">Choose Languages</string>
+    <string name="choose_game_fragment_label">Choose game</string>
+    <string name="flashcards_fragment_label">Flashcards game</string>
+    <string name="quiz_fragment_label">Quiz game</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="hint_text">Wpisz wiadomość</string>
-    <string name="button_send">Wyślij</string>
     <string name="source_language">Choose your language</string>
     <string name="target_language">Choose the language you want to learn</string>
     <string name="flashcards_icon_text">Flashcards</string>
     <string name="quiz_icon_text">Quiz</string>
-<!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

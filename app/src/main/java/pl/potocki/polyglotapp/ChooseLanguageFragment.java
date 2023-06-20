@@ -66,7 +66,7 @@ public class ChooseLanguageFragment extends Fragment {
 
                 if (sourceLang != null && !sourceLang.equals(targetLang)) {
                     NavHostFragment.findNavController(ChooseLanguageFragment.this)
-                            .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                            .navigate(R.id.action_ChooseLanguageFragment_to_ChooseGameFragment);
                 } else {
                     Toast.makeText(getActivity(), "Selected languages must be different", Toast.LENGTH_SHORT).show();
                 }

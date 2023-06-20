@@ -3,26 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/ChooseLanguageFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/ChooseLanguageFragment"
         android:name="pl.potocki.polyglotapp.ChooseLanguageFragment"
-        android:label="@string/first_fragment_label"
+        android:label="@string/choose_language_fragment_label"
         tools:layout="@layout/fragment_choose_language">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_ChooseLanguageFragment_to_ChooseGameFragment"
+            app:destination="@id/ChooseGameFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
+        android:id="@+id/ChooseGameFragment"
         android:name="pl.potocki.polyglotapp.ChooseGameFragment"
-        android:label="@string/second_fragment_label"
+        android:label="@string/choose_game_fragment_label"
         tools:layout="@layout/fragment_choose_game">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_ChooseGameFragment_to_ChooseLanguageFragment"
+            app:destination="@id/ChooseLanguageFragment" />
+        <action
+            android:id="@+id/action_ChooseGameFragment_to_FlashcardsFragment"
+            app:destination="@id/FlashcardsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/FlashcardsFragment"
+        android:name="pl.potocki.polyglotapp.FlashcardsFragment"
+        android:label="@string/flashcards_fragment_label"
+        tools:layout="@layout/fragment_flashcards">
+
+        <action
+            android:id="@+id/action_FlashcardsFragment_to_ChooseGameFragment"
+            app:destination="@id/ChooseGameFragment" />
     </fragment>
 </navigation>
