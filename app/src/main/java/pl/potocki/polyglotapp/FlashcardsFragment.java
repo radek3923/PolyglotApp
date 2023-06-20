@@ -2,6 +2,7 @@ package pl.potocki.polyglotapp;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,8 +19,10 @@ public class FlashcardsFragment extends Fragment {
 
     private FragmentFlashcardsBinding binding;
     private boolean isFlipped = false;
-    private Animator flipRightAnimator;
-    private Animator flipLeftAnimator;
+    private Animator flipLeftHalfAnimator;
+    private Animator flipLeftFullAnimator;
+    private Animator flipRightHalfAnimator;
+    private Animator flipRightFullAnimator;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,13 +34,21 @@ public class FlashcardsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        flipRightAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_right_animation);
-        flipRightAnimator.setTarget(binding.cardContainer);
-        flipRightAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        flipRightHalfAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_right_half_animation);
+        flipRightHalfAnimator.setTarget(binding.cardContainer);
+        flipRightHalfAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        flipLeftAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_left_animation);
-        flipLeftAnimator.setTarget(binding.cardContainer);
-        flipLeftAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        flipRightFullAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_right_full_animation);
+        flipRightFullAnimator.setTarget(binding.cardContainer);
+        flipRightFullAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        flipLeftHalfAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_left_half_animation);
+        flipLeftHalfAnimator.setTarget(binding.cardContainer);
+        flipLeftHalfAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        flipLeftFullAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_left_full_animation);
+        flipLeftFullAnimator.setTarget(binding.cardContainer);
+        flipLeftFullAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
         binding.cardContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,10 +71,24 @@ public class FlashcardsFragment extends Fragment {
     }
 
     private void flipRight() {
-        flipRightAnimator.start();
+        flipRightHalfAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                binding.wordTextView.setText("Prawo");
+            }
+        });
+        flipRightHalfAnimator.start();
+        flipRightFullAnimator.start();
     }
 
     private void flipLeft() {
-        flipLeftAnimator.start();
+        flipLeftHalfAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                binding.wordTextView.setText("Lewo");
+            }
+        });
+        flipLeftHalfAnimator.start();
+        flipLeftFullAnimator.start();
     }
 }
