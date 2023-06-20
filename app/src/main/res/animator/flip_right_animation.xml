@@ -1,6 +1,5 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Animacja obrotu dla pierwszej połowy obrotu (0% - 50%) -->
     <objectAnimator
         android:propertyName="rotationY"
         android:valueFrom="0"
@@ -11,7 +10,6 @@
         android:valueType="floatType"
         android:startOffset="0" />
 
-    <!-- Animacja obrotu dla drugiej połowy obrotu (50% - 100%) -->
     <objectAnimator
         android:propertyName="rotationY"
         android:valueFrom="-90"
