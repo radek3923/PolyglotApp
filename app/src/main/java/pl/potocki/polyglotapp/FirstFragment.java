@@ -11,6 +11,11 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import pl.potocki.polyglotapp.databinding.FragmentFirstBinding;
+import pl.potocki.polyglotapp.randomWord.api.RandomWordApi;
+import pl.potocki.polyglotapp.randomWord.api.RandomWordApiService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FirstFragment extends Fragment {
 
@@ -27,6 +32,41 @@ public class FirstFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+//        System.out.println("test1");
+
+//        DeepLApiService deepLApiService = DeepLApi.getRetrofitInstance().create(DeepLApiService.class);
+//        System.out.println("test2");
+//        Call<LanguageData> call = deepLApiService.getLanguageData();
+//        System.out.println("test3");
+//        call.enqueue(new Callback<LanguageData>() {
+//            @Override
+//            public void onResponse(Call<LanguageData> call, Response<LanguageData> response) {
+//                System.out.println(response.body());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<LanguageData> call, Throwable t) {
+//
+//            }
+//        });
+
+        RandomWordApiService randomWordApiService = RandomWordApi.getRetrofitInstance().create(RandomWordApiService.class);
+        Call<String[]> call = randomWordApiService.getRandomWords();
+        call.enqueue(new Callback<String[]>() {
+            @Override
+            public void onResponse(Call<String[]> call, Response<String[]> response) {
+                System.out.println();
+                String words[] = response.body();
+                for (String word : words){
+                    System.out.println(word);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String[]> call, Throwable t) {
+                return;
+            }
+        });
 
         String[] languages = {"English", "Polish", "Spanish"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, languages);
