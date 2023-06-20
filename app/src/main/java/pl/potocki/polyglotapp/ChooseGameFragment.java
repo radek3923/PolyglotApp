@@ -39,6 +39,8 @@ public class ChooseGameFragment extends Fragment {
 
         binding.quizTextView.setOnClickListener(view1 -> {
             System.out.println("Przenoszę do quizu");
+            NavHostFragment.findNavController(ChooseGameFragment.this)
+                    .navigate(R.id.action_ChooseGameFragment_to_QuizFragment);
         });
 
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
