@@ -11,4 +11,6 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="hint_text">Wpisz wiadomość</string>
     <string name="button_send">Wyślij</string>
+    <string name="source_language">Choose your language</string>
+    <string name="target_language">Choose the language you want to learn</string>
 </resources>

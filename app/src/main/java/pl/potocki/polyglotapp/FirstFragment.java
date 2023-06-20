@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,14 +21,17 @@ public class FirstFragment extends Fragment {
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-
         binding = FragmentFirstBinding.inflate(inflater, container, false);
         return binding.getRoot();
-
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        String[] languages = {"English", "Polish", "Spanish"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, languages);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.sourceLangSpinner.setAdapter(adapter);
 
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,7 +48,7 @@ public class FirstFragment extends Fragment {
         binding = null;
     }
 
-    public void sendMessage(View view){
+    public void sendMessage(View view) {
         System.out.println("Test");
     }
 
