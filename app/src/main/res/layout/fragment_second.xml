@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".SecondFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +21,6 @@
             android:layout_gravity="center">
 
             <ImageView
-                android:id="@+id/flashcardsImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="Opis zdjęcia"
@@ -31,9 +33,11 @@
                 android:background="@drawable/bg_icons" />
 
             <TextView
+                android:id="@+id/flashcardsTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:onClick="flashcardsOnClick"
                 android:text="@string/flashcards_icon_text"
                 android:textColor="@android:color/white"
                 android:textSize="80sp" />
@@ -65,10 +69,10 @@
                 android:background="@drawable/bg_icons" />
 
             <TextView
+                android:id="@+id/quizTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:onClick="getClickkk"
                 android:text="@string/quiz_icon_text"
                 android:textColor="@android:color/white"
                 android:textSize="80sp" />
