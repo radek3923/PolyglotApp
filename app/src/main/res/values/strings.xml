@@ -13,4 +13,6 @@
     <string name="button_send">Wyślij</string>
     <string name="source_language">Choose your language</string>
     <string name="target_language">Choose the language you want to learn</string>
+    <string name="flashcards_icon_text">Flashcards</string>
+    <string name="quiz_icon_text">Quiz</string>
 </resources>

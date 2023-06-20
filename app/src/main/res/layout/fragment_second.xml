@@ -18,8 +18,10 @@
             android:layout_gravity="center">
 
             <ImageView
+                android:id="@+id/flashcardsImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="Opis zdjęcia"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_flashcards" />
 
@@ -32,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="Flashcards"
+                android:text="@string/flashcards_icon_text"
                 android:textColor="@android:color/white"
                 android:textSize="80sp" />
         </FrameLayout>
@@ -66,7 +68,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="Quiz"
+                android:onClick="getClickkk"
+                android:text="@string/quiz_icon_text"
                 android:textColor="@android:color/white"
                 android:textSize="80sp" />
         </FrameLayout>

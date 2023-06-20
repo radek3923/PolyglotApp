@@ -73,4 +73,7 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+    public void getClickkk(View view){
+        System.out.println("testttttttttttttttttt");
+    }
 }

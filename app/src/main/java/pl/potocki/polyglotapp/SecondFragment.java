@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -29,6 +30,11 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        binding.flashcardsImageView.setOnClickListener(view1 -> {
+            System.out.println("test123");
+        });
+
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,4 +50,7 @@ public class SecondFragment extends Fragment {
         binding = null;
     }
 
+    public void getClickkk2(View view){
+        System.out.println("testttttttttttttttttt");
+    }
 }
