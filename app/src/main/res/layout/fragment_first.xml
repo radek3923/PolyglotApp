@@ -19,9 +19,19 @@
 
     <Spinner
         android:id="@+id/sourceLangSpinner"
-        android:layout_width="167dp"
-        android:layout_height="53dp"
-        android:layout_marginBottom="348dp"
+        android:layout_width="198dp"
+        android:layout_height="49dp"
+        android:layout_marginBottom="336dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_first"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Spinner
+        android:id="@+id/targetLangSpinner"
+        android:layout_width="197dp"
+        android:layout_height="52dp"
+        android:layout_marginBottom="184dp"
         app:layout_constraintBottom_toTopOf="@+id/button_first"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -34,10 +44,12 @@
         app:layout_constraintBottom_toTopOf="@+id/sourceLangSpinner"
         app:layout_constraintStart_toStartOf="@+id/sourceLangSpinner" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="61dp"
-        android:layout_height="220dp"
-        tools:layout_editor_absoluteX="45dp"
-        tools:layout_editor_absoluteY="128dp" />
+    <TextView
+        android:id="@+id/targetLangText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/target_language"
+        app:layout_constraintBottom_toTopOf="@+id/targetLangSpinner"
+        app:layout_constraintStart_toStartOf="@+id/targetLangSpinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

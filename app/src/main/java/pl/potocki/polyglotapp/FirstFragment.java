@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -30,13 +31,13 @@ public class FirstFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         binding = FragmentFirstBinding.inflate(inflater, container, false);
-        setAvailableLanguages();
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setAvailableLanguages();
 
 //        RandomWordApiService randomWordApiService = RandomWordApi.getRetrofitInstance().create(RandomWordApiService.class);
 //        Call<String[]> call = randomWordApiService.getRandomWords();
@@ -60,8 +61,15 @@ public class FirstFragment extends Fragment {
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                String sourceLang = (String) binding.sourceLangSpinner.getSelectedItem();
+                String targetLang = (String) binding.targetLangSpinner.getSelectedItem();
+
+                if (sourceLang != null && !sourceLang.equals(targetLang)) {
+                    NavHostFragment.findNavController(FirstFragment.this)
+                            .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                } else {
+                    Toast.makeText(getActivity(), "Selected languages must be different", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -86,6 +94,7 @@ public class FirstFragment extends Fragment {
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, languages);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 binding.sourceLangSpinner.setAdapter(adapter);
+                binding.targetLangSpinner.setAdapter(adapter);
             }
 
             @Override
