@@ -9,11 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import pl.potocki.polyglotapp.databinding.FragmentSecondBinding;
+import pl.potocki.polyglotapp.databinding.FragmentChooseGameBinding;
 
-public class SecondFragment extends Fragment {
+public class ChooseGameFragment extends Fragment {
 
-    private FragmentSecondBinding binding;
+    private FragmentChooseGameBinding binding;
 
     @Override
     public View onCreateView(
@@ -21,7 +21,7 @@ public class SecondFragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
-        binding = FragmentSecondBinding.inflate(inflater, container, false);
+        binding = FragmentChooseGameBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }
@@ -41,7 +41,7 @@ public class SecondFragment extends Fragment {
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
+                NavHostFragment.findNavController(ChooseGameFragment.this)
                         .navigate(R.id.action_SecondFragment_to_FirstFragment);
             }
         });

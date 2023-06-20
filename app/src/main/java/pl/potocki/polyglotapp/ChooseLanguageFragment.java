@@ -13,7 +13,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import java.util.Arrays;
 
-import pl.potocki.polyglotapp.databinding.FragmentFirstBinding;
+import pl.potocki.polyglotapp.databinding.FragmentChooseLanguageBinding;
 import pl.potocki.polyglotapp.language.api.DeepLApi;
 import pl.potocki.polyglotapp.language.api.DeepLApiService;
 import pl.potocki.polyglotapp.language.model.Language;
@@ -21,16 +21,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FirstFragment extends Fragment {
+public class ChooseLanguageFragment extends Fragment {
 
-    private FragmentFirstBinding binding;
+    private FragmentChooseLanguageBinding binding;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragmentFirstBinding.inflate(inflater, container, false);
+        binding = FragmentChooseLanguageBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -65,7 +65,7 @@ public class FirstFragment extends Fragment {
                 String targetLang = (String) binding.targetLangSpinner.getSelectedItem();
 
                 if (sourceLang != null && !sourceLang.equals(targetLang)) {
-                    NavHostFragment.findNavController(FirstFragment.this)
+                    NavHostFragment.findNavController(ChooseLanguageFragment.this)
                             .navigate(R.id.action_FirstFragment_to_SecondFragment);
                 } else {
                     Toast.makeText(getActivity(), "Selected languages must be different", Toast.LENGTH_SHORT).show();
