@@ -11,22 +11,22 @@
         android:background="#F5F5F5"
         android:clickable="true">
 
+        <ImageView
+            android:id="@+id/rotateImageView"
+            android:layout_width="match_parent"
+            android:layout_height="217dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_rotate" />
+
         <TextView
             android:id="@+id/wordTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/hello_blank_fragment"
+            android:text="@string/start_game_flashcards_fragment"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#333333" />
-
-        <ImageView
-            android:id="@+id/rotateImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_rotate" />
 
     </FrameLayout>
 
