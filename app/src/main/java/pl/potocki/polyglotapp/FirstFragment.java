@@ -10,9 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import java.util.Arrays;
+
 import pl.potocki.polyglotapp.databinding.FragmentFirstBinding;
-import pl.potocki.polyglotapp.randomWord.api.RandomWordApi;
-import pl.potocki.polyglotapp.randomWord.api.RandomWordApiService;
+import pl.potocki.polyglotapp.language.api.DeepLApi;
+import pl.potocki.polyglotapp.language.api.DeepLApiService;
+import pl.potocki.polyglotapp.language.model.Language;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,51 +30,32 @@ public class FirstFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         binding = FragmentFirstBinding.inflate(inflater, container, false);
+        setAvailableLanguages();
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        System.out.println("test1");
 
-//        DeepLApiService deepLApiService = DeepLApi.getRetrofitInstance().create(DeepLApiService.class);
-//        System.out.println("test2");
-//        Call<LanguageData> call = deepLApiService.getLanguageData();
-//        System.out.println("test3");
-//        call.enqueue(new Callback<LanguageData>() {
+
+//        RandomWordApiService randomWordApiService = RandomWordApi.getRetrofitInstance().create(RandomWordApiService.class);
+//        Call<String[]> call = randomWordApiService.getRandomWords();
+//        call.enqueue(new Callback<String[]>() {
 //            @Override
-//            public void onResponse(Call<LanguageData> call, Response<LanguageData> response) {
-//                System.out.println(response.body());
+//            public void onResponse(@NonNull Call<String[]> call, @NonNull Response<String[]> response) {
+//                System.out.println();
+//                String[] words = response.body();
+//                for (String word : words){
+//                    System.out.println(word);
+//                }
 //            }
 //
 //            @Override
-//            public void onFailure(Call<LanguageData> call, Throwable t) {
-//
+//            public void onFailure(Call<String[]> call, Throwable t) {
+//                t.printStackTrace();
 //            }
 //        });
 
-        RandomWordApiService randomWordApiService = RandomWordApi.getRetrofitInstance().create(RandomWordApiService.class);
-        Call<String[]> call = randomWordApiService.getRandomWords();
-        call.enqueue(new Callback<String[]>() {
-            @Override
-            public void onResponse(Call<String[]> call, Response<String[]> response) {
-                System.out.println();
-                String words[] = response.body();
-                for (String word : words){
-                    System.out.println(word);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String[]> call, Throwable t) {
-                return;
-            }
-        });
-
-        String[] languages = {"English", "Polish", "Spanish"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, languages);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.sourceLangSpinner.setAdapter(adapter);
 
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,8 +72,26 @@ public class FirstFragment extends Fragment {
         binding = null;
     }
 
-    public void sendMessage(View view) {
-        System.out.println("Test");
-    }
+    public void setAvailableLanguages() {
+        DeepLApiService deepLApiService = DeepLApi.getRetrofitInstance().create(DeepLApiService.class);
+        Call<Language[]> call = deepLApiService.getLanguageData();
+        call.enqueue(new Callback<Language[]>() {
 
+            @Override
+            public void onResponse(@NonNull Call<Language[]> call, @NonNull Response<Language[]> response) {
+                String[] languages = Arrays.stream(response.body())
+                        .map(Language::getName)
+                        .toArray(String[]::new);
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, languages);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                binding.sourceLangSpinner.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Call<Language[]> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
 }
