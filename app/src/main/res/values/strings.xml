@@ -13,7 +13,7 @@
     <string name="target_language">Choose the language you want to learn</string>
     <string name="flashcards_icon_text">Flashcards</string>
     <string name="quiz_icon_text">Quiz</string>
-    <string name="start_game_flashcards_fragment">Generate Words</string>
+    <string name="start_game_flashcards_fragment"> </string>
     <string name="start_game_quiz_fragment">Starting game quiz</string>
     <string name="know_word_game_flashcards_fragment">Yes</string>
     <string name="dont_know_word_game_flashcards_fragment">No</string>

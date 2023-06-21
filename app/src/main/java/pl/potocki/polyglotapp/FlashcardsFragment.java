@@ -13,10 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import pl.potocki.polyglotapp.databinding.FragmentFlashcardsBinding;
-import pl.potocki.polyglotapp.language.model.Language;
 import pl.potocki.polyglotapp.randomWord.api.RandomWordApi;
 import pl.potocki.polyglotapp.randomWord.api.RandomWordApiService;
 import retrofit2.Call;
@@ -26,34 +26,40 @@ import retrofit2.Response;
 public class FlashcardsFragment extends Fragment {
 
     private FragmentFlashcardsBinding binding;
-    private boolean isFlipped = false;
+    private boolean isOnWordSide = true;
     private Animator flipLeftHalfAnimator;
     private Animator flipLeftFullAnimator;
     private Animator flipRightHalfAnimator;
     private Animator flipRightFullAnimator;
 
+    private List<Flashcard> flashcards;
+    private int currentFlashcardIndex = 0;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentFlashcardsBinding.inflate(inflater, container, false);
+        generateRandomWords();
+        flashcards = new ArrayList<>();
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setRandomWords();
         setFlashcardsAnimators();
-
 
         binding.cardContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isFlipped) {
-                    flipRight();
-                    isFlipped = true;
+                if (isOnWordSide) {
+                    flipOnTranslateSide();
+                    isOnWordSide = false;
+                    System.out.println("Strona fiszki z tłumaczeniem");
                 } else {
-                    flipLeft();
-                    isFlipped = false;
+                    flipOnWordSide();
+                    isOnWordSide = true;
+                    System.out.println("Strona fiszki bez tłumaczenia");
                 }
             }
         });
@@ -61,6 +67,7 @@ public class FlashcardsFragment extends Fragment {
         binding.yesButtonFlashcards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showNextWord();
                 System.out.println("Klikam Tak");
             }
         });
@@ -68,9 +75,24 @@ public class FlashcardsFragment extends Fragment {
         binding.noButtonFlashcards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showNextWord();
                 System.out.println("Klikam Nie");
             }
         });
+    }
+
+    private void showNextWord() {
+        if (flashcards.size() > currentFlashcardIndex + 1) {
+            currentFlashcardIndex++;
+            if (isOnWordSide) {
+                setFlashcardText(flashcards.get(currentFlashcardIndex).getWordName());
+            } else {
+                setFlashcardText(flashcards.get(currentFlashcardIndex).getTranslationWordName());
+            }
+        }
+        else{
+            System.out.println("Skończyły się wygenerowane słowa. Tutaj trzeba pewnie wygenerować nowe");
+        }
     }
 
     @Override
@@ -79,40 +101,46 @@ public class FlashcardsFragment extends Fragment {
         binding = null;
     }
 
-    private void flipRight() {
+    private void flipOnWordSide() {
         flipRightHalfAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                binding.wordTextView.setText("Prawo");
+                setFlashcardText(flashcards.get(currentFlashcardIndex).getWordName());
             }
         });
         flipRightHalfAnimator.start();
         flipRightFullAnimator.start();
     }
 
-    private void flipLeft() {
+    private void flipOnTranslateSide() {
         flipLeftHalfAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                binding.wordTextView.setText("Lewo");
+                setFlashcardText(flashcards.get(currentFlashcardIndex).getTranslationWordName());
             }
         });
         flipLeftHalfAnimator.start();
         flipLeftFullAnimator.start();
     }
 
-    public void setRandomWords() {
+    public void setFlashcardText(String text) {
+        binding.wordTextView.setText(text);
+    }
+
+    public void generateRandomWords() {
         RandomWordApiService randomWordApiService = RandomWordApi.getRetrofitInstance().create(RandomWordApiService.class);
         Call<String[]> call = randomWordApiService.getRandomWords();
         call.enqueue(new Callback<String[]>() {
 
             @Override
             public void onResponse(@NonNull Call<String[]> call, @NonNull Response<String[]> response) {
-                System.out.println("Wylosowałem słowa: ");
-                for (String word: response.body()) {
-                    System.out.println(word);
+                assert response.body() != null;
+                flashcards.clear();
+                for (String word : response.body()) {
+                    Flashcard flashcard = new Flashcard(word, "translation");
+                    flashcards.add(flashcard);
                 }
-
+                setFlashcardText(flashcards.get(currentFlashcardIndex).getWordName());
             }
 
             @Override
