@@ -63,6 +63,20 @@ public class FlashcardsFragment extends Fragment {
                 }
             }
         });
+
+        binding.yesButtonFlashcards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Klikam Tak");
+            }
+        });
+
+        binding.noButtonFlashcards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Klikam Nie");
+            }
+        });
     }
 
     @Override
