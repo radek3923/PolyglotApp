@@ -39,25 +39,6 @@ public class ChooseLanguageFragment extends Fragment {
 
         setAvailableLanguages();
 
-//        RandomWordApiService randomWordApiService = RandomWordApi.getRetrofitInstance().create(RandomWordApiService.class);
-//        Call<String[]> call = randomWordApiService.getRandomWords();
-//        call.enqueue(new Callback<String[]>() {
-//            @Override
-//            public void onResponse(@NonNull Call<String[]> call, @NonNull Response<String[]> response) {
-//                System.out.println();
-//                String[] words = response.body();
-//                for (String word : words){
-//                    System.out.println(word);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<String[]> call, Throwable t) {
-//                t.printStackTrace();
-//            }
-//        });
-
-
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

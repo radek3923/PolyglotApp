@@ -13,7 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
+import java.util.Arrays;
+
 import pl.potocki.polyglotapp.databinding.FragmentFlashcardsBinding;
+import pl.potocki.polyglotapp.language.model.Language;
+import pl.potocki.polyglotapp.randomWord.api.RandomWordApi;
+import pl.potocki.polyglotapp.randomWord.api.RandomWordApiService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FlashcardsFragment extends Fragment {
 
@@ -34,22 +42,8 @@ public class FlashcardsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setRandomWords();
+        setFlashcardsAnimators();
 
-        flipRightHalfAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_right_half_animation);
-        flipRightHalfAnimator.setTarget(binding.cardContainer);
-        flipRightHalfAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-
-        flipRightFullAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_right_full_animation);
-        flipRightFullAnimator.setTarget(binding.cardContainer);
-        flipRightFullAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-
-        flipLeftHalfAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_left_half_animation);
-        flipLeftHalfAnimator.setTarget(binding.cardContainer);
-        flipLeftHalfAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-
-        flipLeftFullAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_left_full_animation);
-        flipLeftFullAnimator.setTarget(binding.cardContainer);
-        flipLeftFullAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
         binding.cardContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +102,42 @@ public class FlashcardsFragment extends Fragment {
     }
 
     public void setRandomWords() {
-        System.out.println("Tutaj powinienim wylosowac słowa");
+        RandomWordApiService randomWordApiService = RandomWordApi.getRetrofitInstance().create(RandomWordApiService.class);
+        Call<String[]> call = randomWordApiService.getRandomWords();
+        call.enqueue(new Callback<String[]>() {
+
+            @Override
+            public void onResponse(@NonNull Call<String[]> call, @NonNull Response<String[]> response) {
+                System.out.println("Wylosowałem słowa: ");
+                for (String word: response.body()) {
+                    System.out.println(word);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<String[]> call, Throwable t) {
+                System.out.println("Bład przy losowaniu słow");
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void setFlashcardsAnimators() {
+        flipRightHalfAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_right_half_animation);
+        flipRightHalfAnimator.setTarget(binding.cardContainer);
+        flipRightHalfAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        flipRightFullAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_right_full_animation);
+        flipRightFullAnimator.setTarget(binding.cardContainer);
+        flipRightFullAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        flipLeftHalfAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_left_half_animation);
+        flipLeftHalfAnimator.setTarget(binding.cardContainer);
+        flipLeftHalfAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        flipLeftFullAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_left_full_animation);
+        flipLeftFullAnimator.setTarget(binding.cardContainer);
+        flipLeftFullAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
     }
 }
