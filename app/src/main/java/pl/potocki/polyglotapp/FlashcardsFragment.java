@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +18,15 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import pl.potocki.polyglotapp.communicate.ItemViewModel;
+import pl.potocki.polyglotapp.database.AppDatabase;
+import pl.potocki.polyglotapp.database.Word;
+import pl.potocki.polyglotapp.database.WordDao;
 import pl.potocki.polyglotapp.databinding.FragmentFlashcardsBinding;
 import pl.potocki.polyglotapp.model.flashcards.Flashcard;
 import pl.potocki.polyglotapp.api.deepL.DeepLApi;
@@ -86,6 +93,13 @@ public class FlashcardsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showNextWord();
+
+
+                Word word = new Word();
+                word.setWordContent("Example");
+                word.setLearned(false);
+
+                addWordInBackground(word);
                 System.out.println("Klikam Tak");
             }
         });
@@ -203,8 +217,8 @@ public class FlashcardsFragment extends Fragment {
                 IntStream.range(0, flashcards.size())
                         .forEach(i -> flashcards.get(i).setWordTargetLanguage(translationResponse.getTranslations().get(i).getText()));
 
-                for (Flashcard flash: flashcards
-                     ) {
+                for (Flashcard flash : flashcards
+                ) {
                     System.out.println("Target: " + flash.getWordTargetLanguage());
                 }
             }
@@ -225,7 +239,7 @@ public class FlashcardsFragment extends Fragment {
                 IntStream.range(0, flashcards.size())
                         .forEach(i -> flashcards.get(i).setWordSourceLanguage(translationResponse.getTranslations().get(i).getText()));
 
-                for (Flashcard flash: flashcards
+                for (Flashcard flash : flashcards
                 ) {
                     System.out.println("Source: " + flash.getWordSourceLanguage());
                 }
@@ -238,4 +252,26 @@ public class FlashcardsFragment extends Fragment {
         });
 
     }
+
+    public void addWordInBackground(Word word) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                AppDatabase appDatabase = AppDatabase.getInstance(getContext());
+                WordDao wordDao = appDatabase.wordDao();
+                wordDao.insertWord(word);
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("Added word to Database");
+                    }
+                });
+            }
+        });
+    }
+
 }
