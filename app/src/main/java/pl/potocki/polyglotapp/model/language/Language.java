@@ -1,4 +1,4 @@
-package pl.potocki.polyglotapp.language.model;
+package pl.potocki.polyglotapp.model.language;
 
 public class Language {
     private String language;

@@ -1,4 +1,4 @@
-package pl.potocki.polyglotapp.language.model;
+package pl.potocki.polyglotapp.model.translation;
 
 public class Translation {
     private String text;

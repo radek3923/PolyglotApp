@@ -1,4 +1,4 @@
-package pl.potocki.polyglotapp.language.api;
+package pl.potocki.polyglotapp.api.deepL;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

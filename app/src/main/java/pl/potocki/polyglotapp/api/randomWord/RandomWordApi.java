@@ -1,4 +1,4 @@
-package pl.potocki.polyglotapp.randomWord.api;
+package pl.potocki.polyglotapp.api.randomWord;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

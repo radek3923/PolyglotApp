@@ -1,8 +1,7 @@
-package pl.potocki.polyglotapp.language.api;
+package pl.potocki.polyglotapp.api.deepL;
 
-import pl.potocki.polyglotapp.language.model.Language;
-import pl.potocki.polyglotapp.language.model.Translation;
-import pl.potocki.polyglotapp.language.model.TranslationResponse;
+import pl.potocki.polyglotapp.model.language.Language;
+import pl.potocki.polyglotapp.model.translation.TranslationResponse;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;

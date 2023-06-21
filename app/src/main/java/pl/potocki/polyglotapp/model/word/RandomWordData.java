@@ -1,4 +1,4 @@
-package pl.potocki.polyglotapp.randomWord.model;
+package pl.potocki.polyglotapp.model.word;
 
 public class RandomWordData {
     String[] words;

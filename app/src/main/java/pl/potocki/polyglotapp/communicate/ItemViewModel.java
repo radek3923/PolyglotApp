@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import pl.potocki.polyglotapp.language.model.SelectedLanguages;
+import pl.potocki.polyglotapp.model.language.SelectedLanguages;
 
 public class ItemViewModel extends ViewModel {
     private final MutableLiveData<SelectedLanguages> selectedItem = new MutableLiveData<>();

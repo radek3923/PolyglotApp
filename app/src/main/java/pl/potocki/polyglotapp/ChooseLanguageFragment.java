@@ -18,10 +18,10 @@ import java.util.List;
 
 import pl.potocki.polyglotapp.communicate.ItemViewModel;
 import pl.potocki.polyglotapp.databinding.FragmentChooseLanguageBinding;
-import pl.potocki.polyglotapp.language.api.DeepLApi;
-import pl.potocki.polyglotapp.language.api.DeepLApiService;
-import pl.potocki.polyglotapp.language.model.Language;
-import pl.potocki.polyglotapp.language.model.SelectedLanguages;
+import pl.potocki.polyglotapp.api.deepL.DeepLApi;
+import pl.potocki.polyglotapp.api.deepL.DeepLApiService;
+import pl.potocki.polyglotapp.model.language.Language;
+import pl.potocki.polyglotapp.model.language.SelectedLanguages;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

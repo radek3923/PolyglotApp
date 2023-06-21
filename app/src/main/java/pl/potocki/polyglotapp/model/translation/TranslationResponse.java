@@ -1,4 +1,4 @@
-package pl.potocki.polyglotapp.language.model;
+package pl.potocki.polyglotapp.model.translation;
 
 import java.util.List;
 

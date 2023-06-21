@@ -1,4 +1,4 @@
-package pl.potocki.polyglotapp.flashcard;
+package pl.potocki.polyglotapp.model.flashcards;
 
 public class Flashcard {
     private String wordName;
