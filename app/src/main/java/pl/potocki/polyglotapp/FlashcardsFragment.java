@@ -33,6 +33,7 @@ public class FlashcardsFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setRandomWords();
 
         flipRightHalfAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_right_half_animation);
         flipRightHalfAnimator.setTarget(binding.cardContainer);
@@ -90,5 +91,9 @@ public class FlashcardsFragment extends Fragment {
         });
         flipLeftHalfAnimator.start();
         flipLeftFullAnimator.start();
+    }
+
+    public void setRandomWords() {
+        System.out.println("Tutaj powinienim wylosowac słowa");
     }
 }
