@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,10 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.potocki.polyglotapp.communicate.ItemViewModel;
 import pl.potocki.polyglotapp.databinding.FragmentFlashcardsBinding;
+import pl.potocki.polyglotapp.flashcard.Flashcard;
+import pl.potocki.polyglotapp.language.model.SelectedLanguages;
 import pl.potocki.polyglotapp.randomWord.api.RandomWordApi;
 import pl.potocki.polyglotapp.randomWord.api.RandomWordApiService;
 import retrofit2.Call;
@@ -26,6 +30,8 @@ import retrofit2.Response;
 public class FlashcardsFragment extends Fragment {
 
     private FragmentFlashcardsBinding binding;
+    private ItemViewModel viewModel;
+    private SelectedLanguages selectedLanguages;
     private boolean isOnWordSide = true;
     private Animator flipLeftHalfAnimator;
     private Animator flipLeftFullAnimator;
@@ -36,18 +42,25 @@ public class FlashcardsFragment extends Fragment {
     private int currentFlashcardIndex = 0;
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentFlashcardsBinding.inflate(inflater, container, false);
         generateRandomWords();
         flashcards = new ArrayList<>();
+
+        viewModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class);
+        selectedLanguages = viewModel.getSelectedItem().getValue();
+
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setFlashcardsAnimators();
+
+        System.out.println(selectedLanguages.getSourceLanguage().getName());
 
         binding.cardContainer.setOnClickListener(new View.OnClickListener() {
             @Override

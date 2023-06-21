@@ -9,14 +9,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import pl.potocki.polyglotapp.communicate.ItemViewModel;
 import pl.potocki.polyglotapp.databinding.FragmentChooseLanguageBinding;
 import pl.potocki.polyglotapp.language.api.DeepLApi;
 import pl.potocki.polyglotapp.language.api.DeepLApiService;
 import pl.potocki.polyglotapp.language.model.Language;
+import pl.potocki.polyglotapp.language.model.SelectedLanguages;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,6 +29,9 @@ import retrofit2.Response;
 public class ChooseLanguageFragment extends Fragment {
 
     private FragmentChooseLanguageBinding binding;
+    private ItemViewModel viewModel;
+
+    private List<Language> availableLanguages;
 
     @Override
     public View onCreateView(
@@ -31,6 +39,7 @@ public class ChooseLanguageFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         binding = FragmentChooseLanguageBinding.inflate(inflater, container, false);
+        availableLanguages = new ArrayList<>();
         return binding.getRoot();
     }
 
@@ -42,10 +51,19 @@ public class ChooseLanguageFragment extends Fragment {
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String sourceLang = (String) binding.sourceLangSpinner.getSelectedItem();
-                String targetLang = (String) binding.targetLangSpinner.getSelectedItem();
+                Language sourceLang = (Language) availableLanguages.get(binding.sourceLangSpinner.getSelectedItemPosition());
+                Language targetLang = (Language) availableLanguages.get(binding.targetLangSpinner.getSelectedItemPosition());
 
                 if (sourceLang != null && !sourceLang.equals(targetLang)) {
+
+                    viewModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class);
+
+                    System.out.println("Source: " + sourceLang.getName());
+                    System.out.println("Target: " + targetLang.getName());
+
+                    SelectedLanguages selectedLanguage = new SelectedLanguages(sourceLang, targetLang);
+                    viewModel.setData(selectedLanguage);
+
                     NavHostFragment.findNavController(ChooseLanguageFragment.this)
                             .navigate(R.id.action_ChooseLanguageFragment_to_ChooseGameFragment);
                 } else {
@@ -68,7 +86,9 @@ public class ChooseLanguageFragment extends Fragment {
 
             @Override
             public void onResponse(@NonNull Call<Language[]> call, @NonNull Response<Language[]> response) {
-                String[] languages = Arrays.stream(response.body())
+                availableLanguages = Arrays.asList(response.body());
+
+                String[] languages = availableLanguages.stream()
                         .map(Language::getName)
                         .toArray(String[]::new);
 
