@@ -16,6 +16,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import pl.potocki.polyglotapp.communicate.ItemViewModel;
 import pl.potocki.polyglotapp.databinding.FragmentFlashcardsBinding;
@@ -49,9 +51,8 @@ public class FlashcardsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentFlashcardsBinding.inflate(inflater, container, false);
-        generateRandomWords();
-        translateGeneratedWords();
         flashcards = new ArrayList<>();
+        generateRandomWords();
 
         viewModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class);
         selectedLanguages = viewModel.getSelectedItem().getValue();
@@ -102,9 +103,9 @@ public class FlashcardsFragment extends Fragment {
         if (flashcards.size() > currentFlashcardIndex + 1) {
             currentFlashcardIndex++;
             if (isOnWordSide) {
-                setFlashcardText(flashcards.get(currentFlashcardIndex).getWordName());
+                setFlashcardText(flashcards.get(currentFlashcardIndex).getWordSourceLanguage());
             } else {
-                setFlashcardText(flashcards.get(currentFlashcardIndex).getTranslationWordName());
+                setFlashcardText(flashcards.get(currentFlashcardIndex).getWordTargetLanguage());
             }
         } else {
             System.out.println("Skończyły się wygenerowane słowa. Tutaj trzeba pewnie wygenerować nowe");
@@ -121,7 +122,7 @@ public class FlashcardsFragment extends Fragment {
         flipRightHalfAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                setFlashcardText(flashcards.get(currentFlashcardIndex).getWordName());
+                setFlashcardText(flashcards.get(currentFlashcardIndex).getWordSourceLanguage());
             }
         });
         flipRightHalfAnimator.start();
@@ -132,7 +133,7 @@ public class FlashcardsFragment extends Fragment {
         flipLeftHalfAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                setFlashcardText(flashcards.get(currentFlashcardIndex).getTranslationWordName());
+                setFlashcardText(flashcards.get(currentFlashcardIndex).getWordTargetLanguage());
             }
         });
         flipLeftHalfAnimator.start();
@@ -156,7 +157,8 @@ public class FlashcardsFragment extends Fragment {
                     Flashcard flashcard = new Flashcard(word, "translation");
                     flashcards.add(flashcard);
                 }
-                setFlashcardText(flashcards.get(currentFlashcardIndex).getWordName());
+                setFlashcardText(flashcards.get(currentFlashcardIndex).getWordSourceLanguage());
+                translateGeneratedWords(flashcards);
             }
 
             @Override
@@ -185,18 +187,26 @@ public class FlashcardsFragment extends Fragment {
         flipLeftFullAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
     }
 
-    public void translateGeneratedWords(){
+    public void translateGeneratedWords(List<Flashcard> flashcards) {
         DeepLApiService deepLApiService = DeepLApi.getRetrofitInstance().create(DeepLApiService.class);
-//        Call<Translation> call = deepLApiService.getTranslatedText("Warszawa", selectedLanguages.getSourceLanguage().getLanguage(), selectedLanguages.getTargetLanguage().getLanguage());
-        Call<TranslationResponse> call = deepLApiService.getTranslatedText("Warszawa", "PL", "EN");
-        call.enqueue(new Callback<TranslationResponse>() {
+
+        List<String> wordsToTranslate = flashcards.stream()
+                .map(Flashcard::getWordSourceLanguage)
+                .collect(Collectors.toList());
+
+        Call<TranslationResponse> callToTranslateInTargetLanguage = deepLApiService.getTranslatedText(wordsToTranslate, selectedLanguages.getTargetLanguage().getLanguage());
+        callToTranslateInTargetLanguage.enqueue(new Callback<TranslationResponse>() {
 
             @Override
             public void onResponse(Call<TranslationResponse> call, Response<TranslationResponse> response) {
-                System.out.println("Przetłumaczona wartośc:");
-
                 TranslationResponse translationResponse = (TranslationResponse) response.body();
-                System.out.println(translationResponse.getTranslations().get(0).getText());
+                IntStream.range(0, flashcards.size())
+                        .forEach(i -> flashcards.get(i).setWordTargetLanguage(translationResponse.getTranslations().get(i).getText()));
+
+                for (Flashcard flash: flashcards
+                     ) {
+                    System.out.println("Target: " + flash.getWordTargetLanguage());
+                }
             }
 
             @Override
@@ -204,5 +214,28 @@ public class FlashcardsFragment extends Fragment {
 
             }
         });
+
+
+        Call<TranslationResponse> callToTranslateInSourceLanguage = deepLApiService.getTranslatedText(wordsToTranslate, selectedLanguages.getSourceLanguage().getLanguage());
+        callToTranslateInSourceLanguage.enqueue(new Callback<TranslationResponse>() {
+
+            @Override
+            public void onResponse(Call<TranslationResponse> call, Response<TranslationResponse> response) {
+                TranslationResponse translationResponse = (TranslationResponse) response.body();
+                IntStream.range(0, flashcards.size())
+                        .forEach(i -> flashcards.get(i).setWordSourceLanguage(translationResponse.getTranslations().get(i).getText()));
+
+                for (Flashcard flash: flashcards
+                ) {
+                    System.out.println("Source: " + flash.getWordSourceLanguage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TranslationResponse> call, Throwable t) {
+
+            }
+        });
+
     }
 }

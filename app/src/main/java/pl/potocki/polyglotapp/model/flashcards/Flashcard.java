@@ -1,27 +1,27 @@
 package pl.potocki.polyglotapp.model.flashcards;
 
 public class Flashcard {
-    private String wordName;
-    private String translationWordName;
+    private String wordSourceLanguage;
+    private String wordTargetLanguage;
 
     public Flashcard(String wordName, String translationWordName) {
-        this.wordName = wordName;
-        this.translationWordName = translationWordName;
+        this.wordSourceLanguage = wordName;
+        this.wordTargetLanguage = translationWordName;
     }
 
-    public String getWordName() {
-        return wordName;
+    public String getWordSourceLanguage() {
+        return wordSourceLanguage;
     }
 
-    public void setWordName(String wordName) {
-        this.wordName = wordName;
+    public void setWordSourceLanguage(String wordSourceLanguage) {
+        this.wordSourceLanguage = wordSourceLanguage;
     }
 
-    public String getTranslationWordName() {
-        return translationWordName;
+    public String getWordTargetLanguage() {
+        return wordTargetLanguage;
     }
 
-    public void setTranslationWordName(String translationWordName) {
-        this.translationWordName = translationWordName;
+    public void setWordTargetLanguage(String wordTargetLanguage) {
+        this.wordTargetLanguage = wordTargetLanguage;
     }
 }
