@@ -20,7 +20,12 @@ import java.util.List;
 import pl.potocki.polyglotapp.communicate.ItemViewModel;
 import pl.potocki.polyglotapp.databinding.FragmentFlashcardsBinding;
 import pl.potocki.polyglotapp.flashcard.Flashcard;
+import pl.potocki.polyglotapp.language.api.DeepLApi;
+import pl.potocki.polyglotapp.language.api.DeepLApiService;
+import pl.potocki.polyglotapp.language.model.Language;
 import pl.potocki.polyglotapp.language.model.SelectedLanguages;
+import pl.potocki.polyglotapp.language.model.Translation;
+import pl.potocki.polyglotapp.language.model.TranslationResponse;
 import pl.potocki.polyglotapp.randomWord.api.RandomWordApi;
 import pl.potocki.polyglotapp.randomWord.api.RandomWordApiService;
 import retrofit2.Call;
@@ -42,12 +47,12 @@ public class FlashcardsFragment extends Fragment {
     private int currentFlashcardIndex = 0;
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentFlashcardsBinding.inflate(inflater, container, false);
         generateRandomWords();
+        translateGeneratedWords();
         flashcards = new ArrayList<>();
 
         viewModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class);
@@ -55,6 +60,7 @@ public class FlashcardsFragment extends Fragment {
 
         return binding.getRoot();
     }
+
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -102,8 +108,7 @@ public class FlashcardsFragment extends Fragment {
             } else {
                 setFlashcardText(flashcards.get(currentFlashcardIndex).getTranslationWordName());
             }
-        }
-        else{
+        } else {
             System.out.println("Skończyły się wygenerowane słowa. Tutaj trzeba pewnie wygenerować nowe");
         }
     }
@@ -180,5 +185,26 @@ public class FlashcardsFragment extends Fragment {
         flipLeftFullAnimator = AnimatorInflater.loadAnimator(getActivity(), R.animator.flip_left_full_animation);
         flipLeftFullAnimator.setTarget(binding.cardContainer);
         flipLeftFullAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+    }
+
+    public void translateGeneratedWords(){
+        DeepLApiService deepLApiService = DeepLApi.getRetrofitInstance().create(DeepLApiService.class);
+//        Call<Translation> call = deepLApiService.getTranslatedText("Warszawa", selectedLanguages.getSourceLanguage().getLanguage(), selectedLanguages.getTargetLanguage().getLanguage());
+        Call<TranslationResponse> call = deepLApiService.getTranslatedText("Warszawa", "PL", "EN");
+        call.enqueue(new Callback<TranslationResponse>() {
+
+            @Override
+            public void onResponse(Call<TranslationResponse> call, Response<TranslationResponse> response) {
+                System.out.println("Przetłumaczona wartośc:");
+
+                TranslationResponse translationResponse = (TranslationResponse) response.body();
+                System.out.println(translationResponse.getTranslations().get(0).getText());
+            }
+
+            @Override
+            public void onFailure(Call<TranslationResponse> call, Throwable t) {
+
+            }
+        });
     }
 }
