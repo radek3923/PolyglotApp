@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -41,11 +42,21 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
+    //retrofit to requests
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    //to avoid problems with same libraries
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
+
+    //cardview to transfer data between fragments
     implementation 'androidx.cardview:cardview:1.0.0'
 
+    //room to database
     implementation "androidx.room:room-runtime:2.5.2"
     annotationProcessor "androidx.room:room-compiler:2.5.2"
+
+    //Hilt to add dependency injection
+    implementation "com.google.dagger:hilt-android:2.45"
+    annotationProcessor "com.google.dagger:hilt-android-compiler:2.45"
 }

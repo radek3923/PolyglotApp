@@ -99,7 +99,7 @@ public class FlashcardsFragment extends Fragment {
                 word.setWordContent("Example");
                 word.setLearned(false);
 
-                addWordInBackground(word);
+                viewModel.addWordInBackground(word);
                 System.out.println("Klikam Tak");
             }
         });
@@ -253,25 +253,25 @@ public class FlashcardsFragment extends Fragment {
 
     }
 
-    public void addWordInBackground(Word word) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Handler handler = new Handler(Looper.getMainLooper());
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-
-                AppDatabase appDatabase = AppDatabase.getInstance(getContext());
-                WordDao wordDao = appDatabase.wordDao();
-                wordDao.insertWord(word);
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println("Added word to Database");
-                    }
-                });
-            }
-        });
-    }
+//    public void addWordInBackground(Word word) {
+//        ExecutorService executorService = Executors.newSingleThreadExecutor();
+//        Handler handler = new Handler(Looper.getMainLooper());
+//        executorService.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                AppDatabase appDatabase = AppDatabase.getInstance(getContext());
+//                WordDao wordDao = appDatabase.wordDao();
+//                wordDao.insertWord(word);
+//
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        System.out.println("Added word to Database");
+//                    }
+//                });
+//            }
+//        });
+//    }
 
 }

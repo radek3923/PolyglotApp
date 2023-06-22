@@ -1,17 +1,32 @@
 package pl.potocki.polyglotapp.communicate;
 
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+import pl.potocki.polyglotapp.database.Word;
 import pl.potocki.polyglotapp.database.WordDao;
 import pl.potocki.polyglotapp.model.language.SelectedLanguages;
 
+@HiltViewModel
 public class ItemViewModel extends ViewModel {
     private final MutableLiveData<SelectedLanguages> selectedItem = new MutableLiveData<>();
-    private WordDao wordDao;
+    private final WordDao wordDao;
+
+    @Inject
+    public ItemViewModel(WordDao wordDao) {
+        this.wordDao = wordDao;
+    }
 
     public void setData(SelectedLanguages selectedLanguages) {
         selectedItem.setValue(selectedLanguages);
@@ -21,6 +36,23 @@ public class ItemViewModel extends ViewModel {
         return selectedItem;
     }
 
+    public void addWordInBackground(Word word) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
 
+                wordDao.insertWord(word);
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("Added word to Database");
+                    }
+                });
+            }
+        });
+    }
 
 }
