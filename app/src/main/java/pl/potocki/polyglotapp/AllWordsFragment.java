@@ -96,6 +96,8 @@ public class AllWordsFragment extends Fragment {
                 adapterNotLearntWords.notifyDataSetChanged();
                 adapterLearntWords.notifyDataSetChanged();
                 binding.notLearntWordsList.clearChoices();
+
+//                viewModel.updateWordInBackground();
             } else {
                 Toast.makeText(requireContext(), "No word selected", Toast.LENGTH_SHORT).show();
             }

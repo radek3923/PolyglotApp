@@ -80,4 +80,21 @@ public class ItemViewModel extends ViewModel {
         });
     }
 
+    public void updateWordInBackground(Word word) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                wordDao.updateWord(word);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("Reading all words from database");
+                    }
+                });
+            }
+        });
+    }
+
 }
