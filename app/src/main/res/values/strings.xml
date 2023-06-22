@@ -10,8 +10,8 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="source_language">Choose your language</string>
-    <string name="target_language">Choose the language you want to learn</string>
+    <string name="source_language">Your language</string>
+    <string name="target_language">Language you want to learn</string>
     <string name="flashcards_icon_text">Flashcards</string>
     <string name="quiz_icon_text">Quiz</string>
     <string name="start_game_flashcards_fragment"> </string>

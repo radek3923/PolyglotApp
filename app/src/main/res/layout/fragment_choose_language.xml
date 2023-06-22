@@ -8,10 +8,11 @@
 
     <Button
         android:id="@+id/button_first"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="142dp"
+        android:layout_height="57dp"
         android:layout_marginBottom="144dp"
         android:text="@string/next"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -19,21 +20,22 @@
 
     <Spinner
         android:id="@+id/sourceLangSpinner"
-        android:layout_width="198dp"
-        android:layout_height="49dp"
-        android:layout_marginBottom="336dp"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="316dp"
         app:layout_constraintBottom_toTopOf="@+id/button_first"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Spinner
         android:id="@+id/targetLangSpinner"
-        android:layout_width="197dp"
-        android:layout_height="52dp"
-        android:layout_marginBottom="184dp"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="148dp"
         app:layout_constraintBottom_toTopOf="@+id/button_first"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -41,6 +43,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/source_language"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/sourceLangSpinner"
         app:layout_constraintStart_toStartOf="@+id/sourceLangSpinner" />
 
@@ -49,6 +53,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/target_language"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/targetLangSpinner"
         app:layout_constraintStart_toStartOf="@+id/targetLangSpinner" />
 
