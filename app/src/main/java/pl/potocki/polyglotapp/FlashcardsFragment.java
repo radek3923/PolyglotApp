@@ -59,8 +59,6 @@ public class FlashcardsFragment extends Fragment {
     private int currentFlashcardIndex = 0;
 
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -95,7 +93,6 @@ public class FlashcardsFragment extends Fragment {
                 }
             }
         });
-
 
 
         binding.seeMyWordsButtonFlashcards.setOnClickListener(v -> {
@@ -190,7 +187,6 @@ public class FlashcardsFragment extends Fragment {
                     Flashcard flashcard = new Flashcard(word, "translation");
                     flashcards.add(flashcard);
                 }
-                setFlashcardText(flashcards.get(currentFlashcardIndex).getWordSourceLanguage());
                 translateGeneratedWords(flashcards);
             }
 
@@ -235,11 +231,6 @@ public class FlashcardsFragment extends Fragment {
                 TranslationResponse translationResponse = (TranslationResponse) response.body();
                 IntStream.range(0, flashcards.size())
                         .forEach(i -> flashcards.get(i).setWordTargetLanguage(translationResponse.getTranslations().get(i).getText()));
-
-                for (Flashcard flash : flashcards
-                ) {
-                    System.out.println("Target: " + flash.getWordTargetLanguage());
-                }
             }
 
             @Override
@@ -258,10 +249,8 @@ public class FlashcardsFragment extends Fragment {
                 IntStream.range(0, flashcards.size())
                         .forEach(i -> flashcards.get(i).setWordSourceLanguage(translationResponse.getTranslations().get(i).getText()));
 
-                for (Flashcard flash : flashcards
-                ) {
-                    System.out.println("Source: " + flash.getWordSourceLanguage());
-                }
+                System.out.println("Ustawiam piersze słowo na: " + flashcards.get(currentFlashcardIndex).getWordSourceLanguage());
+                setFlashcardText(flashcards.get(currentFlashcardIndex).getWordSourceLanguage());
             }
 
             @Override
@@ -269,28 +258,5 @@ public class FlashcardsFragment extends Fragment {
 
             }
         });
-
     }
-
-//    public void addWordInBackground(Word word) {
-//        ExecutorService executorService = Executors.newSingleThreadExecutor();
-//        Handler handler = new Handler(Looper.getMainLooper());
-//        executorService.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                AppDatabase appDatabase = AppDatabase.getInstance(getContext());
-//                WordDao wordDao = appDatabase.wordDao();
-//                wordDao.insertWord(word);
-//
-//                handler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        System.out.println("Added word to Database");
-//                    }
-//                });
-//            }
-//        });
-//    }
-
 }
