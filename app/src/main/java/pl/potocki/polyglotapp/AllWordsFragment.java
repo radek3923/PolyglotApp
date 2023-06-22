@@ -11,6 +11,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -37,20 +38,24 @@ public class AllWordsFragment extends Fragment {
     private FragmentAllWordsBinding binding;
     private ItemViewModel viewModel;
 
+    private ArrayAdapter<String> adapterLearntWords;
+    private ArrayAdapter<String> adapterNotLearntWords;
+    private List<String> learntWords;
+    private List<String> notLearntWords;
+
     private Observer<List<Word>> wordsObserver = words -> {
-        //list of learnt words
-        List<String> learntWords = words.stream()
+        learntWords = words.stream()
                 .filter(Word::isLearned)
                 .map(Word::getWordContent)
                 .collect(Collectors.toList());
 
-        List<String> notLearntWords = words.stream()
+        notLearntWords = words.stream()
                 .filter(Predicate.not(Word::isLearned))
                 .map(Word::getWordContent)
                 .collect(Collectors.toList());
 
-        ArrayAdapter<String> adapterLearntWords = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, learntWords);
-        ArrayAdapter<String> adapterNotLearntWords = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, notLearntWords);
+        adapterLearntWords = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, learntWords);
+        adapterNotLearntWords = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, notLearntWords);
         binding.learntWordsList.setAdapter(adapterLearntWords);
         binding.notLearntWordsList.setAdapter(adapterNotLearntWords);
     };
@@ -71,6 +76,31 @@ public class AllWordsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel.getAllWordsInBackground();
+
+        binding.moveButton.setOnClickListener(v -> {
+            int learntWordsSelectedPosition = binding.learntWordsList.getCheckedItemPosition();
+            int notLearntWordsSelectedPosition = binding.notLearntWordsList.getCheckedItemPosition();
+
+            if (learntWordsSelectedPosition != AdapterView.INVALID_POSITION) {
+                String selectedWord = learntWords.get(learntWordsSelectedPosition);
+                learntWords.remove(learntWordsSelectedPosition);
+                notLearntWords.add(selectedWord);
+                adapterLearntWords.notifyDataSetChanged();
+                adapterNotLearntWords.notifyDataSetChanged();
+                binding.learntWordsList.clearChoices();
+
+            } else if (notLearntWordsSelectedPosition != AdapterView.INVALID_POSITION) {
+                String selectedWord = notLearntWords.get(notLearntWordsSelectedPosition);
+                notLearntWords.remove(notLearntWordsSelectedPosition);
+                learntWords.add(selectedWord);
+                adapterNotLearntWords.notifyDataSetChanged();
+                adapterLearntWords.notifyDataSetChanged();
+                binding.notLearntWordsList.clearChoices();
+            } else {
+                Toast.makeText(requireContext(), "No word selected", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
