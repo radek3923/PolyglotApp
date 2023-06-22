@@ -8,8 +8,20 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
+import java.util.Arrays;
+
+import pl.potocki.polyglotapp.api.deepL.DeepLApi;
+import pl.potocki.polyglotapp.api.deepL.DeepLApiService;
+import pl.potocki.polyglotapp.api.wordsDefinitionsApi.WordDefinitionsApi;
+import pl.potocki.polyglotapp.api.wordsDefinitionsApi.WordDefinitionsApiService;
 import pl.potocki.polyglotapp.databinding.FragmentQuizBinding;
+import pl.potocki.polyglotapp.model.language.Language;
+import pl.potocki.polyglotapp.model.word.WordDefinitions;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QuizFragment extends Fragment {
 
@@ -23,8 +35,8 @@ public class QuizFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         binding = FragmentQuizBinding.inflate(inflater, container, false);
+        getWordsDefinitions();
         return binding.getRoot();
-
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -52,5 +64,24 @@ public class QuizFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void getWordsDefinitions() {
+        WordDefinitionsApiService wordDefinitionsApiService = WordDefinitionsApi.getRetrofitInstance().create(WordDefinitionsApiService.class);
+        Call<WordDefinitions> call = wordDefinitionsApiService.getWordDefinitions("tree");
+        call.enqueue(new Callback<WordDefinitions>() {
+
+            @Override
+            public void onResponse(Call<WordDefinitions> call, Response<WordDefinitions> response) {
+                WordDefinitions wordDefinitions = response.body();
+                System.out.println("Pobieram Definicje");
+                System.out.println(wordDefinitions.getDefinitions().get(0).getDefinition());
+            }
+
+            @Override
+            public void onFailure(Call<WordDefinitions> call, Throwable t) {
+
+            }
+        });
     }
 }
