@@ -91,21 +91,6 @@ public class FlashcardsFragment extends Fragment {
             }
         });
 
-        binding.yesButtonFlashcards.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showNextWord();
-
-
-                Word word = new Word();
-                word.setWordContent("Example");
-                word.setLearned(false);
-
-                viewModel.addWordInBackground(word);
-                System.out.println("Klikam Tak");
-            }
-        });
-
         binding.seeMyWordsButtonFlashcards.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("FragmentLiveDataObserve")
             @Override
@@ -113,7 +98,7 @@ public class FlashcardsFragment extends Fragment {
                 viewModel.getAllWordsInBackground();
 
                 viewModel.getAllWords().observe(FlashcardsFragment.this, words -> {
-                System.out.println("Klikam przycisk See My Words");
+                    System.out.println("Klikam przycisk See My Words");
                     for (Word word : words) {
                         System.out.println(word.getWordContent());
                     }
@@ -121,10 +106,27 @@ public class FlashcardsFragment extends Fragment {
             }
         });
 
+        binding.yesButtonFlashcards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Word word = new Word(flashcards.get(currentFlashcardIndex).getWordTargetLanguage(),
+                        selectedLanguages.getTargetLanguage().getLanguage(),
+                        true);
+                viewModel.addWordInBackground(word);
+
+                showNextWord();
+                System.out.println("Klikam Tak");
+            }
+        });
 
         binding.noButtonFlashcards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Word word = new Word(flashcards.get(currentFlashcardIndex).getWordTargetLanguage(),
+                        selectedLanguages.getTargetLanguage().getLanguage(),
+                        false);
+                viewModel.addWordInBackground(word);
+
                 showNextWord();
                 System.out.println("Klikam Nie");
             }

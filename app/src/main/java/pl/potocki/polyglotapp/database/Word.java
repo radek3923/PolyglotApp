@@ -12,10 +12,17 @@ public class Word {
     @ColumnInfo(name = "word_content")
     private String wordContent;
 
+    @ColumnInfo(name = "language")
+    private String language;
+
     @ColumnInfo(name = "is_learned")
     private boolean isLearned;
 
-    // Getters and setters
+    public Word(String wordContent, String language, boolean isLearned) {
+        this.wordContent = wordContent;
+        this.language = language;
+        this.isLearned = isLearned;
+    }
 
     public int getId() {
         return id;
@@ -39,5 +46,13 @@ public class Word {
 
     public void setLearned(boolean learned) {
         isLearned = learned;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

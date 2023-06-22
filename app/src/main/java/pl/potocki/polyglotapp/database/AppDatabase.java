@@ -2,11 +2,14 @@ package pl.potocki.polyglotapp.database;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Word.class}, version = 1)
+@Database(entities = {Word.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract WordDao wordDao();
 
@@ -16,6 +19,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "word_database")
+                    .fallbackToDestructiveMigration()
                     .build();
         }
         return instance;
