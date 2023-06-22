@@ -38,20 +38,18 @@ public class AllWordsFragment extends Fragment {
     private FragmentAllWordsBinding binding;
     private ItemViewModel viewModel;
 
-    private ArrayAdapter<String> adapterLearntWords;
-    private ArrayAdapter<String> adapterNotLearntWords;
-    private List<String> learntWords;
-    private List<String> notLearntWords;
+    private ArrayAdapter<Word> adapterLearntWords;
+    private ArrayAdapter<Word> adapterNotLearntWords;
+    private List<Word> learntWords;
+    private List<Word> notLearntWords;
 
     private Observer<List<Word>> wordsObserver = words -> {
         learntWords = words.stream()
                 .filter(Word::isLearned)
-                .map(Word::getWordContent)
                 .collect(Collectors.toList());
 
         notLearntWords = words.stream()
                 .filter(Predicate.not(Word::isLearned))
-                .map(Word::getWordContent)
                 .collect(Collectors.toList());
 
         adapterLearntWords = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, learntWords);
@@ -77,32 +75,32 @@ public class AllWordsFragment extends Fragment {
 
         viewModel.getAllWordsInBackground();
 
+
         binding.moveButton.setOnClickListener(v -> {
             int learntWordsSelectedPosition = binding.learntWordsList.getCheckedItemPosition();
             int notLearntWordsSelectedPosition = binding.notLearntWordsList.getCheckedItemPosition();
 
-            if (learntWordsSelectedPosition != AdapterView.INVALID_POSITION) {
-                String selectedWord = learntWords.get(learntWordsSelectedPosition);
+
+            if (learntWordsSelectedPosition != AdapterView.INVALID_POSITION ) {
+                notLearntWords.add(learntWords.get(learntWordsSelectedPosition));
                 learntWords.remove(learntWordsSelectedPosition);
-                notLearntWords.add(selectedWord);
                 adapterLearntWords.notifyDataSetChanged();
                 adapterNotLearntWords.notifyDataSetChanged();
                 binding.learntWordsList.clearChoices();
 
-            } else if (notLearntWordsSelectedPosition != AdapterView.INVALID_POSITION) {
-                String selectedWord = notLearntWords.get(notLearntWordsSelectedPosition);
+            } else if (notLearntWordsSelectedPosition != AdapterView.INVALID_POSITION ) {
+                learntWords.add(notLearntWords.get(notLearntWordsSelectedPosition));
                 notLearntWords.remove(notLearntWordsSelectedPosition);
-                learntWords.add(selectedWord);
                 adapterNotLearntWords.notifyDataSetChanged();
                 adapterLearntWords.notifyDataSetChanged();
                 binding.notLearntWordsList.clearChoices();
 
-//                viewModel.updateWordInBackground();
+                //here update this word to database
+//                viewModel.updateWordInBackground(some word);
             } else {
                 Toast.makeText(requireContext(), "No word selected", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     @Override
