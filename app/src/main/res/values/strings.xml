@@ -17,4 +17,5 @@
     <string name="start_game_quiz_fragment">Starting game quiz</string>
     <string name="know_word_game_flashcards_fragment">Yes</string>
     <string name="dont_know_word_game_flashcards_fragment">No</string>
+    <string name="see_all_words_flashcards_fragment">See my words</string>
 </resources>

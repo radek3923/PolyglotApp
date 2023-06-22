@@ -3,6 +3,7 @@ package pl.potocki.polyglotapp;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -44,6 +45,7 @@ public class FlashcardsFragment extends Fragment {
     private FragmentFlashcardsBinding binding;
     private ItemViewModel viewModel;
     private SelectedLanguages selectedLanguages;
+    private List<Word> allWords;
     private boolean isOnWordSide = true;
     private Animator flipLeftHalfAnimator;
     private Animator flipLeftFullAnimator;
@@ -103,6 +105,22 @@ public class FlashcardsFragment extends Fragment {
                 System.out.println("Klikam Tak");
             }
         });
+
+        binding.seeMyWordsButtonFlashcards.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("FragmentLiveDataObserve")
+            @Override
+            public void onClick(View v) {
+                viewModel.getAllWordsInBackground();
+
+                viewModel.getAllWords().observe(FlashcardsFragment.this, words -> {
+                System.out.println("Klikam przycisk See My Words");
+                    for (Word word : words) {
+                        System.out.println(word.getWordContent());
+                    }
+                });
+            }
+        });
+
 
         binding.noButtonFlashcards.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -37,7 +37,7 @@
         android:layout_below="@id/cardContainer"
         android:layout_alignParentStart="true"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="8dp"
         android:text="@string/dont_know_word_game_flashcards_fragment" />
 
@@ -48,8 +48,19 @@
         android:layout_below="@id/cardContainer"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="80dp"
         android:text="@string/know_word_game_flashcards_fragment" />
+
+    <Button
+        android:id="@+id/see_my_words_button_flashcards"
+        android:layout_width="281dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/cardContainer"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="171dp"
+        android:layout_marginEnd="53dp"
+        android:text="@string/see_all_words_flashcards_fragment" />
 
 </RelativeLayout>

@@ -1,6 +1,5 @@
 package pl.potocki.polyglotapp.communicate;
 
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -8,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,6 +21,7 @@ import pl.potocki.polyglotapp.model.language.SelectedLanguages;
 @HiltViewModel
 public class ItemViewModel extends ViewModel {
     private final MutableLiveData<SelectedLanguages> selectedItem = new MutableLiveData<>();
+    private MutableLiveData<List<Word>> allWords = new MutableLiveData<>();
     private final WordDao wordDao;
 
     @Inject
@@ -36,6 +37,10 @@ public class ItemViewModel extends ViewModel {
         return selectedItem;
     }
 
+    public LiveData<List<Word>> getAllWords() {
+        return allWords;
+    }
+
     public void addWordInBackground(Word word) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
@@ -49,6 +54,26 @@ public class ItemViewModel extends ViewModel {
                     @Override
                     public void run() {
                         System.out.println("Added word to Database");
+                    }
+                });
+            }
+        });
+    }
+
+    public void getAllWordsInBackground() {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                List<Word> words = wordDao.getAllWords();
+                allWords.postValue(words);
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("Reading all words from database");
                     }
                 });
             }
