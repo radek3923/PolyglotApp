@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -35,18 +36,6 @@ public class QuizFragment extends Fragment {
     private final String nounPartOfSpeech = "noun";
 
 
-    private List<Word> learntWords;
-    private List<Word> notLearntWords;
-
-    private Observer<List<Word>> wordsObserver = words -> {
-        learntWords = words.stream()
-                .filter(Word::isLearned)
-                .collect(Collectors.toList());
-
-        notLearntWords = words.stream()
-                .filter(Predicate.not(Word::isLearned))
-                .collect(Collectors.toList());
-     };
 
     @Override
     public View onCreateView(
@@ -55,14 +44,14 @@ public class QuizFragment extends Fragment {
     ) {
         binding = FragmentQuizBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class);
-        viewModel.getAllWords().observe(getViewLifecycleOwner(), wordsObserver);
-        setNewWordDefinition();
+
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel.getAllWordsInBackground();
+
         View.OnClickListener buttonClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,8 +68,8 @@ public class QuizFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 System.out.println("Klikam przycisk sumbit");
-                showNextWordDefinition();
                 //TODO generate new word?
+
             }
         });
 
@@ -97,9 +86,9 @@ public class QuizFragment extends Fragment {
         binding = null;
     }
 
-    private void setNewWordDefinition() {
+    private void setNewWordDefinition(Word word) {
         WordDefinitionsApiService wordDefinitionsApiService = WordDefinitionsApi.getRetrofitInstance().create(WordDefinitionsApiService.class);
-        Call<WordDefinitions> call = wordDefinitionsApiService.getWordDefinitions("123412412");
+        Call<WordDefinitions> call = wordDefinitionsApiService.getWordDefinitions(word.getWordContent());
         call.enqueue(new Callback<WordDefinitions>() {
 
             @Override
@@ -108,7 +97,7 @@ public class QuizFragment extends Fragment {
                 System.out.println("Ustawiam Definicje");
 
 
-                if(wordDefinitions == null){
+                if (wordDefinitions == null) {
                     System.out.println("To jest nullem");
                     return;
                 }
@@ -118,9 +107,8 @@ public class QuizFragment extends Fragment {
 
                 if (!definitions.isEmpty()) {
                     binding.question.setText(definitions.get(0).getDefinition());
-                }
-                else{
-                    if(!wordDefinitions.getDefinitions().isEmpty()){
+                } else {
+                    if (!wordDefinitions.getDefinitions().isEmpty()) {
                         binding.question.setText(wordDefinitions.getDefinitions().get(0).getDefinition());
                     }
                 }
@@ -131,9 +119,5 @@ public class QuizFragment extends Fragment {
 
             }
         });
-    }
-
-    private void showNextWordDefinition() {
-        setNewWordDefinition();
     }
 }
