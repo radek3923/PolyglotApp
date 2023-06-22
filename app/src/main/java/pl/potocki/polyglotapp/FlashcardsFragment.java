@@ -47,14 +47,8 @@ public class FlashcardsFragment extends Fragment {
     private FragmentFlashcardsBinding binding;
     private ItemViewModel viewModel;
     private SelectedLanguages selectedLanguages;
-    private List<Word> allWords;
 
-    private Observer<List<Word>> wordsObserver = words -> {
-        System.out.println("Klikam przycisk See My Words");
-        for (Word word : words) {
-            System.out.println(word.getWordContent());
-        }
-    };
+
     private boolean isOnWordSide = true;
     private Animator flipLeftHalfAnimator;
     private Animator flipLeftFullAnimator;
@@ -102,10 +96,10 @@ public class FlashcardsFragment extends Fragment {
             }
         });
 
-        viewModel.getAllWords().observe(getViewLifecycleOwner(), wordsObserver);
+
 
         binding.seeMyWordsButtonFlashcards.setOnClickListener(v -> {
-            viewModel.getAllWordsInBackground();
+
 
             NavHostFragment.findNavController(FlashcardsFragment.this)
                     .navigate(R.id.action_FlashcardsFragment_to_allWordsFragment);
