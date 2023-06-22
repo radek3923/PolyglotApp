@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Handler;
@@ -46,6 +47,13 @@ public class FlashcardsFragment extends Fragment {
     private ItemViewModel viewModel;
     private SelectedLanguages selectedLanguages;
     private List<Word> allWords;
+
+    private Observer<List<Word>> wordsObserver = words -> {
+        System.out.println("Klikam przycisk See My Words");
+        for (Word word : words) {
+            System.out.println(word.getWordContent());
+        }
+    };
     private boolean isOnWordSide = true;
     private Animator flipLeftHalfAnimator;
     private Animator flipLeftFullAnimator;
@@ -54,6 +62,8 @@ public class FlashcardsFragment extends Fragment {
 
     private List<Flashcard> flashcards;
     private int currentFlashcardIndex = 0;
+
+
 
 
     @Override
@@ -91,19 +101,10 @@ public class FlashcardsFragment extends Fragment {
             }
         });
 
-        binding.seeMyWordsButtonFlashcards.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("FragmentLiveDataObserve")
-            @Override
-            public void onClick(View v) {
-                viewModel.getAllWordsInBackground();
+        viewModel.getAllWords().observe(getViewLifecycleOwner(), wordsObserver);
 
-                viewModel.getAllWords().observe(FlashcardsFragment.this, words -> {
-                    System.out.println("Klikam przycisk See My Words");
-                    for (Word word : words) {
-                        System.out.println(word.getWordContent());
-                    }
-                });
-            }
+        binding.seeMyWordsButtonFlashcards.setOnClickListener(v -> {
+            viewModel.getAllWordsInBackground();
         });
 
         binding.yesButtonFlashcards.setOnClickListener(new View.OnClickListener() {
