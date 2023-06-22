@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import pl.potocki.polyglotapp.api.deepL.DeepLApi;
 import pl.potocki.polyglotapp.api.deepL.DeepLApiService;
 import pl.potocki.polyglotapp.communicate.ItemViewModel;
+import pl.potocki.polyglotapp.communicate.WordAdapter;
 import pl.potocki.polyglotapp.database.Word;
 import pl.potocki.polyglotapp.databinding.FragmentAllWordsBinding;
 import pl.potocki.polyglotapp.databinding.FragmentChooseLanguageBinding;
@@ -52,8 +53,8 @@ public class AllWordsFragment extends Fragment {
                 .filter(Predicate.not(Word::isLearned))
                 .collect(Collectors.toList());
 
-        adapterLearntWords = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, learntWords);
-        adapterNotLearntWords = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, notLearntWords);
+        adapterLearntWords = new WordAdapter(requireContext(), learntWords);
+        adapterNotLearntWords = new WordAdapter(requireContext(), notLearntWords);
         binding.learntWordsList.setAdapter(adapterLearntWords);
         binding.notLearntWordsList.setAdapter(adapterNotLearntWords);
     };
