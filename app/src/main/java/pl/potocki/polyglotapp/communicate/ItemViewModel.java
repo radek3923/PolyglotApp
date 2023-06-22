@@ -90,7 +90,8 @@ public class ItemViewModel extends ViewModel {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("Reading all words from database");
+                        System.out.println("Updating word in database");
+                        System.out.println(word.toString());
                     }
                 });
             }

@@ -55,4 +55,14 @@ public class Word {
     public void setLanguage(String language) {
         this.language = language;
     }
+
+    @Override
+    public String toString() {
+        return "Word{" +
+                "id=" + id +
+                ", wordContent='" + wordContent + '\'' +
+                ", language='" + language + '\'' +
+                ", isLearned=" + isLearned +
+                '}';
+    }
 }

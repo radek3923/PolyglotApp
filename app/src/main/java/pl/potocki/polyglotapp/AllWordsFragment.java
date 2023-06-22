@@ -70,22 +70,29 @@ public class AllWordsFragment extends Fragment {
             int notLearntWordsSelectedPosition = binding.notLearntWordsList.getCheckedItemPosition();
 
 
-            if (learntWordsSelectedPosition != AdapterView.INVALID_POSITION ) {
-                notLearntWords.add(learntWords.get(learntWordsSelectedPosition));
+            if (learntWordsSelectedPosition != AdapterView.INVALID_POSITION) {
+                Word word = learntWords.get(learntWordsSelectedPosition);
+                notLearntWords.add(word);
                 learntWords.remove(learntWordsSelectedPosition);
                 adapterLearntWords.notifyDataSetChanged();
                 adapterNotLearntWords.notifyDataSetChanged();
                 binding.learntWordsList.clearChoices();
 
-            } else if (notLearntWordsSelectedPosition != AdapterView.INVALID_POSITION ) {
-                learntWords.add(notLearntWords.get(notLearntWordsSelectedPosition));
+                //update this word to database
+                word.setLearned(false);
+                viewModel.updateWordInBackground(word);
+
+            } else if (notLearntWordsSelectedPosition != AdapterView.INVALID_POSITION) {
+                Word word = notLearntWords.get(notLearntWordsSelectedPosition);
+                learntWords.add(word);
                 notLearntWords.remove(notLearntWordsSelectedPosition);
                 adapterNotLearntWords.notifyDataSetChanged();
                 adapterLearntWords.notifyDataSetChanged();
                 binding.notLearntWordsList.clearChoices();
 
-                //here update this word to database
-//                viewModel.updateWordInBackground(some word);
+                //update this word to database
+                word.setLearned(true);
+                viewModel.updateWordInBackground(word);
             } else {
                 Toast.makeText(requireContext(), "No word selected", Toast.LENGTH_SHORT).show();
             }
