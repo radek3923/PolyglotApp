@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -105,6 +106,9 @@ public class FlashcardsFragment extends Fragment {
 
         binding.seeMyWordsButtonFlashcards.setOnClickListener(v -> {
             viewModel.getAllWordsInBackground();
+
+            NavHostFragment.findNavController(FlashcardsFragment.this)
+                    .navigate(R.id.action_FlashcardsFragment_to_allWordsFragment);
         });
 
         binding.yesButtonFlashcards.setOnClickListener(new View.OnClickListener() {

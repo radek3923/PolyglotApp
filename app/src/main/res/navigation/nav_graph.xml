@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_FlashcardsFragment_to_ChooseGameFragment"
             app:destination="@id/ChooseGameFragment" />
+        <action
+            android:id="@+id/action_FlashcardsFragment_to_allWordsFragment"
+            app:destination="@id/allWordsFragment" />
     </fragment>
     <fragment
         android:id="@+id/QuizFragment"
@@ -49,5 +52,14 @@
         <action
             android:id="@+id/action_QuizFragment_to_ChooseGameFragment"
             app:destination="@id/ChooseGameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/allWordsFragment"
+        android:name="pl.potocki.polyglotapp.AllWordsFragment"
+        android:label="@string/fragment_all_words_label"
+        tools:layout="@layout/fragment_all_words" >
+        <action
+            android:id="@+id/action_allWordsFragment_to_FlashcardsFragment"
+            app:destination="@id/FlashcardsFragment" />
     </fragment>
 </navigation>

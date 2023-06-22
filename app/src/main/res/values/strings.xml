@@ -5,6 +5,7 @@
     <string name="choose_language_fragment_label">Choose Languages</string>
     <string name="choose_game_fragment_label">Choose game</string>
     <string name="flashcards_fragment_label">Flashcards game</string>
+    <string name="fragment_all_words_label">Your words</string>
     <string name="quiz_fragment_label">Quiz game</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
