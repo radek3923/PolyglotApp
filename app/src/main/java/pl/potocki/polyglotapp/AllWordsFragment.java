@@ -1,13 +1,6 @@
 package pl.potocki.polyglotapp;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,24 +8,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import pl.potocki.polyglotapp.api.deepL.DeepLApi;
-import pl.potocki.polyglotapp.api.deepL.DeepLApiService;
 import pl.potocki.polyglotapp.communicate.ItemViewModel;
 import pl.potocki.polyglotapp.communicate.WordAdapter;
 import pl.potocki.polyglotapp.database.Word;
 import pl.potocki.polyglotapp.databinding.FragmentAllWordsBinding;
-import pl.potocki.polyglotapp.databinding.FragmentChooseLanguageBinding;
-import pl.potocki.polyglotapp.model.language.Language;
-import pl.potocki.polyglotapp.model.language.SelectedLanguages;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AllWordsFragment extends Fragment {
 
