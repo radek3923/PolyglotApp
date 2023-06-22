@@ -138,6 +138,8 @@ public class FlashcardsFragment extends Fragment {
                 setFlashcardText(flashcards.get(currentFlashcardIndex).getWordTargetLanguage());
             }
         } else {
+            currentFlashcardIndex = 0;
+            generateRandomWords();
             System.out.println("Skończyły się wygenerowane słowa. Tutaj trzeba pewnie wygenerować nowe");
         }
     }
