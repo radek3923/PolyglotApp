@@ -71,18 +71,23 @@ public class AllWordsFragment extends Fragment {
 
         viewModel.getAllWordsInBackground();
 
-        binding.learntWordsList.setOnItemClickListener((parent, view1, position, id) -> {
-            Word word = learntWords.get(binding.learntWordsList.getCheckedItemPosition());
-            showEditDescriptionDialog(word);
+        binding.modifyButton.setOnClickListener(view1 -> {
+            int learntWordsSelectedPosition = binding.learntWordsList.getCheckedItemPosition();
+            int notLearntWordsSelectedPosition = binding.notLearntWordsList.getCheckedItemPosition();
 
+            if (learntWordsSelectedPosition != AdapterView.INVALID_POSITION) {
+                Word word = learntWords.get(learntWordsSelectedPosition);
+                showEditDescriptionDialog(word);
+
+            } else if (notLearntWordsSelectedPosition != AdapterView.INVALID_POSITION) {
+                Word word = notLearntWords.get(notLearntWordsSelectedPosition);
+                showEditDescriptionDialog(word);
+            } else {
+                Toast.makeText(requireContext(), "No word selected", Toast.LENGTH_SHORT).show();
+            }
         });
 
-        binding.notLearntWordsList.setOnItemClickListener((parent, view1, position, id) -> {
-            Word word = notLearntWords.get(binding.notLearntWordsList.getCheckedItemPosition());
-            showEditDescriptionDialog(word);
-        });
-
-        binding.moveButton.setOnClickListener(v -> {
+        binding.transferButton.setOnClickListener(v -> {
             int learntWordsSelectedPosition = binding.learntWordsList.getCheckedItemPosition();
             int notLearntWordsSelectedPosition = binding.notLearntWordsList.getCheckedItemPosition();
 
