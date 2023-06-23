@@ -147,7 +147,9 @@ public class FlashcardsFragment extends Fragment {
     }
 
     public void setFlashcardText(String text) {
-        binding.wordTextView.setText(text);
+        if (binding.wordTextView != null) {
+            binding.wordTextView.setText(text);
+        }
     }
 
     public void generateRandomWords() {

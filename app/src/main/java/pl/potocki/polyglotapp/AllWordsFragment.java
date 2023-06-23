@@ -2,6 +2,7 @@ package pl.potocki.polyglotapp;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,8 +70,15 @@ public class AllWordsFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         viewModel.getAllWordsInBackground();
+
+        binding.learntWordsList.setOnItemClickListener((adapterView, view1, position, id) -> {
+            changeItemColor(position, true);
+        });
+
+        binding.notLearntWordsList.setOnItemClickListener((adapterView, view1, position, id) -> {
+            changeItemColor(position, false);
+        });
 
         binding.modifyButton.setOnClickListener(view1 -> {
             int learntWordsSelectedPosition = binding.learntWordsList.getCheckedItemPosition();
@@ -90,6 +99,7 @@ public class AllWordsFragment extends Fragment {
         binding.transferButton.setOnClickListener(v -> {
             int learntWordsSelectedPosition = binding.learntWordsList.getCheckedItemPosition();
             int notLearntWordsSelectedPosition = binding.notLearntWordsList.getCheckedItemPosition();
+            setAllItemsOnWhiteColor();
 
 
             if (learntWordsSelectedPosition != AdapterView.INVALID_POSITION) {
@@ -175,14 +185,37 @@ public class AllWordsFragment extends Fragment {
                 notLearntWords.remove(word);
                 adapterNotLearntWords.notifyDataSetChanged();
             }
-
-//            notLearntWords.remove(word);
-
             Toast.makeText(requireContext(), "Word deleted", Toast.LENGTH_SHORT).show();
             dialog.cancel();
         });
 
         builder.show();
+    }
+
+    private void changeItemColor(int position, boolean isLearntList) {
+        ListView listViewToGrey = isLearntList ? binding.learntWordsList : binding.notLearntWordsList;
+        setAllItemsOnWhiteColor();
+        View selectedView = listViewToGrey.getChildAt(position);
+        if (selectedView != null) {
+            selectedView.setBackgroundColor(Color.GRAY);
+        }
+    }
+
+    private void setAllItemsOnWhiteColor(){
+        ListView listViewLearnedWords = binding.learntWordsList;
+        ListView listViewNotLearnedWords = binding.notLearntWordsList;
+        for (int i = 0; i < listViewLearnedWords.getCount(); i++) {
+            View itemView = listViewLearnedWords.getChildAt(i);
+            if (itemView != null) {
+                itemView.setBackgroundColor(Color.WHITE);
+            }
+        }
+        for (int i = 0; i < listViewNotLearnedWords.getCount(); i++) {
+            View itemView = listViewNotLearnedWords.getChildAt(i);
+            if (itemView != null) {
+                itemView.setBackgroundColor(Color.WHITE);
+            }
+        }
     }
 
 }

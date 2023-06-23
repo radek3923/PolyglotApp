@@ -100,7 +100,6 @@ public class QuizFragment extends Fragment {
                 System.out.println("Adding word [" + word.getWordContent() + "] as not learned to database");
             }
 
-
             binding.ansA.setBackgroundColor(COLOR_WHITE);
             binding.ansB.setBackgroundColor(COLOR_WHITE);
             binding.ansC.setBackgroundColor(COLOR_WHITE);
