@@ -25,4 +25,5 @@
     <string name="choose_game">Choose your lessons</string>
     <string name="previous_button">Previous</string>
     <string name="submit_button">Submit</string>
+    <string name="guess_definition">Guess the definition od word</string>
 </resources>
