@@ -43,7 +43,7 @@ public class ChooseLanguageFragment extends Fragment {
 
     @Override
     public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
+            @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
         binding = FragmentChooseLanguageBinding.inflate(inflater, container, false);
