@@ -71,13 +71,16 @@ public class AllWordsFragment extends Fragment {
 
         viewModel.getAllWordsInBackground();
 
-
         binding.learntWordsList.setOnItemClickListener((parent, view1, position, id) -> {
             Word word = learntWords.get(binding.learntWordsList.getCheckedItemPosition());
             showEditDescriptionDialog(word);
 
         });
 
+        binding.notLearntWordsList.setOnItemClickListener((parent, view1, position, id) -> {
+            Word word = notLearntWords.get(binding.notLearntWordsList.getCheckedItemPosition());
+            showEditDescriptionDialog(word);
+        });
 
         binding.moveButton.setOnClickListener(v -> {
             int learntWordsSelectedPosition = binding.learntWordsList.getCheckedItemPosition();
@@ -150,7 +153,7 @@ public class AllWordsFragment extends Fragment {
 
                 viewModel.updateWordInBackground(word);
 
-                Toast.makeText(requireContext(), "Weather record updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Word  updated", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(requireContext(), "No description changes", Toast.LENGTH_SHORT).show();
             }
@@ -160,7 +163,17 @@ public class AllWordsFragment extends Fragment {
 
         builder.setNeutralButton("Delete", (dialog, which) -> {
             viewModel.deleteWordInBackground(word);
-            Toast.makeText(requireContext(), "Weather record deleted", Toast.LENGTH_SHORT).show();
+            if (word.isLearned()) {
+                learntWords.remove(word);
+                adapterLearntWords.notifyDataSetChanged();
+            } else {
+                notLearntWords.remove(word);
+                adapterNotLearntWords.notifyDataSetChanged();
+            }
+
+//            notLearntWords.remove(word);
+
+            Toast.makeText(requireContext(), "Word deleted", Toast.LENGTH_SHORT).show();
             dialog.cancel();
         });
 
