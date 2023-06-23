@@ -36,8 +36,9 @@ public class ChooseLanguageFragment extends Fragment {
     private List<Language> availableLanguages;
 
     private Observer<String> cityObserver = city -> {
-        System.out.println("Wykonuje sie observer");
-        tryToFindSourceLanguage(city);
+        if (city != null) {
+            tryToFindSourceLanguage(city);
+        }
     };
 
     @Override
@@ -56,9 +57,6 @@ public class ChooseLanguageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         setAvailableLanguages();
-//        tryToFindSourceLanguage();
-
-//        System.out.println("Miasto to " + viewModel.getCityFromGps());
 
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override

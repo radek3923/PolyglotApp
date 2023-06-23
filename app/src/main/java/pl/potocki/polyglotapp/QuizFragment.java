@@ -95,8 +95,15 @@ public class QuizFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 System.out.println("Klikam przycisk sumbit");
+                if(selectedAnswerIndex == -1){
+                    Toast.makeText(getActivity(), "No answer selected", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (selectedAnswerIndex == correctAnswerIndex) {
-                    Toast.makeText(getActivity(), "Udało się!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Correct answer!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getActivity(), "Bad answer", Toast.LENGTH_SHORT).show();
                 }
                 binding.ansA.setBackgroundColor(COLOR_WHITE);
                 binding.ansB.setBackgroundColor(COLOR_WHITE);
@@ -167,8 +174,9 @@ public class QuizFragment extends Fragment {
     }
 
     public void generateRandomWords() {
+        clearingButtons();
         RandomWordApiService randomWordApiService = RandomWordApi.getRetrofitInstance().create(RandomWordApiService.class);
-        Call<String[]> call = randomWordApiService.getRandomWords();
+        Call<String[]> call = randomWordApiService.getRandomWords(4);
         call.enqueue(new Callback<String[]>() {
 
             @Override
@@ -189,6 +197,7 @@ public class QuizFragment extends Fragment {
     private void translateGeneratedWords(List<String> wordsToTranslate, String definition) {
         DeepLApiService deepLApiService = DeepLApi.getRetrofitInstance().create(DeepLApiService.class);
 
+        System.out.println("Definition of word is: " + definition);
         List<String> translatedWords = new ArrayList<>(wordsToTranslate);
         translatedWords.add(definition);
 
@@ -215,5 +224,14 @@ public class QuizFragment extends Fragment {
 
             }
         });
+    }
+    public void clearingButtons(){
+        selectedAnswerIndex = -1;
+        correctAnswerIndex = -1;
+        binding.ansA.setText("");
+        binding.ansB.setText("");
+        binding.ansC.setText("");
+        binding.ansD.setText("");
+        binding.question.setText("");
     }
 }

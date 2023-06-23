@@ -178,7 +178,7 @@ public class FlashcardsFragment extends Fragment {
 
     public void generateRandomWords() {
         RandomWordApiService randomWordApiService = RandomWordApi.getRetrofitInstance().create(RandomWordApiService.class);
-        Call<String[]> call = randomWordApiService.getRandomWords();
+        Call<String[]> call = randomWordApiService.getRandomWords(10);
         call.enqueue(new Callback<String[]>() {
 
             @Override

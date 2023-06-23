@@ -47,7 +47,7 @@
     <fragment
         android:id="@+id/QuizFragment"
         android:name="pl.potocki.polyglotapp.QuizFragment"
-        android:label="fragment_quiz"
+        android:label="@string/quiz_fragment_label"
         tools:layout="@layout/fragment_quiz" >
         <action
             android:id="@+id/action_QuizFragment_to_ChooseGameFragment"
