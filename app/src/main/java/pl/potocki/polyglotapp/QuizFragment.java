@@ -23,6 +23,7 @@ import pl.potocki.polyglotapp.api.randomWord.RandomWordApiService;
 import pl.potocki.polyglotapp.api.wordsDefinitionsApi.WordDefinitionsApi;
 import pl.potocki.polyglotapp.api.wordsDefinitionsApi.WordDefinitionsApiService;
 import pl.potocki.polyglotapp.communicate.ItemViewModel;
+import pl.potocki.polyglotapp.database.Word;
 import pl.potocki.polyglotapp.databinding.FragmentQuizBinding;
 import pl.potocki.polyglotapp.model.language.SelectedLanguages;
 import pl.potocki.polyglotapp.model.translation.Translation;
@@ -86,11 +87,20 @@ public class QuizFragment extends Fragment {
                 Toast.makeText(getActivity(), "No answer selected", Toast.LENGTH_SHORT).show();
                 return;
             }
+            Word word = new Word(words.get(selectedAnswerIndex), selectedLanguages.getTargetLanguage().getLanguage(), true);
             if (selectedAnswerIndex == correctAnswerIndex) {
                 Toast.makeText(getActivity(), "Correct answer!", Toast.LENGTH_SHORT).show();
+                word.setLearned(true);
+                viewModel.addWordInBackground(word);
+                System.out.println("Adding word [" + word.getWordContent() + "] as learned to database");
             } else {
+                word.setLearned(false);
                 Toast.makeText(getActivity(), "Bad answer", Toast.LENGTH_SHORT).show();
+                viewModel.addWordInBackground(word);
+                System.out.println("Adding word [" + word.getWordContent() + "] as not learned to database");
             }
+
+
             binding.ansA.setBackgroundColor(COLOR_WHITE);
             binding.ansB.setBackgroundColor(COLOR_WHITE);
             binding.ansC.setBackgroundColor(COLOR_WHITE);
