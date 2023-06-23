@@ -22,9 +22,9 @@ import pl.potocki.polyglotapp.model.language.SelectedLanguages;
 public class ItemViewModel extends ViewModel {
     private final WordDao wordDao;
     private final MutableLiveData<SelectedLanguages> selectedItem = new MutableLiveData<>();
-    private MutableLiveData<List<Word>> allWords = new MutableLiveData<>();
+    private final MutableLiveData<List<Word>> allWords = new MutableLiveData<>();
 
-    private MutableLiveData<String> cityFromGps = new MutableLiveData<>();
+    private final MutableLiveData<String> cityFromGps = new MutableLiveData<>();
 
     @Inject
     public ItemViewModel(WordDao wordDao) {

@@ -15,7 +15,7 @@ import java.util.List;
 import pl.potocki.polyglotapp.database.Word;
 
 public class WordAdapter extends ArrayAdapter<Word> {
-    private List<Word> words;
+    private final List<Word> words;
 
     public WordAdapter(Context context, List<Word> words) {
         super(context, 0, words);
