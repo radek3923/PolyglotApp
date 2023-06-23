@@ -119,14 +119,15 @@ public class QuizFragment extends Fragment {
         correctAnswerIndex = random.nextInt(4);
 
         String correctWord = words.get(correctAnswerIndex);
-
+        System.out.println("Choose word [" + correctWord + "] as correct answer");
         Call<WordDefinitions> call = wordDefinitionsApiService.getWordDefinitions(correctWord);
         call.enqueue(new Callback<>() {
 
             @Override
             public void onResponse(@NonNull Call<WordDefinitions> call, @NonNull Response<WordDefinitions> response) {
                 WordDefinitions wordDefinitions = response.body();
-                if (wordDefinitions == null) {
+                if (wordDefinitions == null || wordDefinitions.getDefinitions().isEmpty()) {
+                    System.out.println("Not found definition for word: " + correctWord);
                     generateRandomWords();
                     return;
                 }
@@ -136,10 +137,17 @@ public class QuizFragment extends Fragment {
 
                 if (!definitions.isEmpty()) {
                     translateGeneratedWords(words, definitions.get(0).getDefinition());
+                    System.out.println("Take [" + definitions.get(0).getPartOfSpeech()
+                            + "] type of speech definition for word [" + correctWord + "] as ["
+                            + definitions.get(0).getDefinition() + "]");
                 } else {
                     if (!wordDefinitions.getDefinitions().isEmpty()) {
+                        System.out.println("Take [" + wordDefinitions.getDefinitions().get(0).getPartOfSpeech()
+                                + "] type of speech definition for word [" + correctWord + "] as ["
+                                + wordDefinitions.getDefinitions().get(0).getDefinition() + "]");
                         translateGeneratedWords(words, wordDefinitions.getDefinitions().get(0).getDefinition());
                     }
+
                 }
             }
 
@@ -160,6 +168,7 @@ public class QuizFragment extends Fragment {
             public void onResponse(@NonNull Call<String[]> call, @NonNull Response<String[]> response) {
                 assert response.body() != null;
                 words = Arrays.asList(response.body());
+                System.out.println("Words random generated [in english]:" + words.toString());
                 setWordDefinition(words);
             }
 
@@ -186,7 +195,7 @@ public class QuizFragment extends Fragment {
                 words = translationResponse.getTranslations().stream()
                         .map(Translation::getText)
                         .collect(Collectors.toList());
-
+                System.out.println("Translated words with description: " + words.toString());
                 binding.ansA.setText(words.get(0));
                 binding.ansB.setText(words.get(1));
                 binding.ansC.setText(words.get(2));
@@ -209,5 +218,6 @@ public class QuizFragment extends Fragment {
         binding.ansC.setText("");
         binding.ansD.setText("");
         binding.question.setText("");
+        System.out.println("Button texts have been cleared");
     }
 }
