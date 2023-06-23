@@ -26,7 +26,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:text="This will be the question"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="24dp"
@@ -46,7 +45,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:backgroundTint="@color/white"
-            android:text="Ans A"
             android:textColor="@color/black" />
 
         <Button
@@ -55,7 +53,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:backgroundTint="@color/white"
-            android:text="Ans B"
             android:textColor="@color/black" />
 
         <Button
@@ -64,7 +61,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:backgroundTint="@color/white"
-            android:text="Ans C"
             android:textColor="@color/black" />
 
         <Button
@@ -73,7 +69,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:backgroundTint="@color/white"
-            android:text="Ans D"
             android:textColor="@color/black" />
 
     </LinearLayout>
@@ -84,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/choices_layout"
         android:layout_marginTop="40dp"
-        android:text="Submit" />
+        android:text="@string/submit_button"/>
 
 
 </RelativeLayout>

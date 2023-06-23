@@ -19,4 +19,10 @@
     <string name="know_word_game_flashcards_fragment">Yes</string>
     <string name="dont_know_word_game_flashcards_fragment">No</string>
     <string name="see_all_words_flashcards_fragment">See my words</string>
+    <string name="learned_words">Learned words</string>
+    <string name="not_learned_words">Not learned yet</string>
+    <string name="transfer_word">Transfer</string>
+    <string name="choose_game">Choose your lessons</string>
+    <string name="previous_button">Previous</string>
+    <string name="submit_button">Submit</string>
 </resources>
