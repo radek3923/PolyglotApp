@@ -35,7 +35,7 @@ public class ChooseLanguageFragment extends Fragment {
 
     private List<Language> availableLanguages;
 
-    private Observer<String> cityObserver = city -> {
+    private final Observer<String> cityObserver = city -> {
         if (city != null) {
             tryToFindSourceLanguage(city);
         }
@@ -58,21 +58,18 @@ public class ChooseLanguageFragment extends Fragment {
 
         setAvailableLanguages();
 
-        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Language sourceLang = (Language) availableLanguages.get(binding.sourceLangSpinner.getSelectedItemPosition());
-                Language targetLang = (Language) availableLanguages.get(binding.targetLangSpinner.getSelectedItemPosition());
+        binding.buttonFirst.setOnClickListener(view1 -> {
+            Language sourceLang = (Language) availableLanguages.get(binding.sourceLangSpinner.getSelectedItemPosition());
+            Language targetLang = (Language) availableLanguages.get(binding.targetLangSpinner.getSelectedItemPosition());
 
-                if (sourceLang != null && !sourceLang.equals(targetLang)) {
-                    SelectedLanguages selectedLanguage = new SelectedLanguages(sourceLang, targetLang);
-                    viewModel.setData(selectedLanguage);
+            if (sourceLang != null && !sourceLang.equals(targetLang)) {
+                SelectedLanguages selectedLanguage = new SelectedLanguages(sourceLang, targetLang);
+                viewModel.setData(selectedLanguage);
 
-                    NavHostFragment.findNavController(ChooseLanguageFragment.this)
-                            .navigate(R.id.action_ChooseLanguageFragment_to_ChooseGameFragment);
-                } else {
-                    Toast.makeText(getActivity(), "Selected languages must be different", Toast.LENGTH_SHORT).show();
-                }
+                NavHostFragment.findNavController(ChooseLanguageFragment.this)
+                        .navigate(R.id.action_ChooseLanguageFragment_to_ChooseGameFragment);
+            } else {
+                Toast.makeText(getActivity(), "Selected languages must be different", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -86,7 +83,7 @@ public class ChooseLanguageFragment extends Fragment {
     public void setAvailableLanguages() {
         DeepLApiService deepLApiService = DeepLApi.getRetrofitInstance().create(DeepLApiService.class);
         Call<Language[]> call = deepLApiService.getLanguageData();
-        call.enqueue(new Callback<Language[]>() {
+        call.enqueue(new Callback<>() {
 
             @Override
             public void onResponse(@NonNull Call<Language[]> call, @NonNull Response<Language[]> response) {
@@ -116,10 +113,10 @@ public class ChooseLanguageFragment extends Fragment {
 
         DeepLApiService deepLApiService = DeepLApi.getRetrofitInstance().create(DeepLApiService.class);
         Call<TranslationResponse> callToTranslateInTargetLanguage = deepLApiService.getTranslatedText(list, "EN");
-        callToTranslateInTargetLanguage.enqueue(new Callback<TranslationResponse>() {
+        callToTranslateInTargetLanguage.enqueue(new Callback<>() {
 
             @Override
-            public void onResponse(Call<TranslationResponse> call, Response<TranslationResponse> response) {
+            public void onResponse(@NonNull Call<TranslationResponse> call, @NonNull Response<TranslationResponse> response) {
                 TranslationResponse translationResponse = response.body();
                 String detectedLanguageId = translationResponse.getTranslations().get(0).getDetected_source_language();
 

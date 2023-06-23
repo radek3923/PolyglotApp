@@ -52,30 +52,16 @@ public class MainActivity extends AppCompatActivity {
                     if (addresses.size() > 0) {
                         String city = addresses.get(0).getLocality();
                         runOnUiThread(() -> {
-                            Log.d("Location", "Ustawiam miasto na " + city);
+                            Log.d("Location", "Setting city: " + city);
                             viewModel.setCityFromGps(city);
                         });
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
                 isLocationReceived = true;
-                // Możesz również zatrzymać nasłuchiwanie aktualizacji lokalizacji tutaj
                 stopLocationUpdates();
             }
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
         }
     };
 

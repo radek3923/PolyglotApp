@@ -35,7 +35,7 @@ public class ItemViewModel extends ViewModel {
         cityFromGps.setValue(s);
     }
 
-    public LiveData<String> getCityFromGps(){
+    public LiveData<String> getCityFromGps() {
         return cityFromGps;
     }
 
@@ -54,39 +54,21 @@ public class ItemViewModel extends ViewModel {
     public void addWordInBackground(Word word) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-
-                wordDao.insertWord(word);
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println("Added word to Database");
-                    }
-                });
-            }
+        executorService.execute(() -> {
+            wordDao.insertWord(word);
+            handler.post(() -> System.out.println("Added word to Database"));
         });
     }
 
     public void getAllWordsInBackground() {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
+        executorService.execute(() -> {
 
-                List<Word> words = wordDao.getAllWords();
-                allWords.postValue(words);
+            List<Word> words = wordDao.getAllWords();
+            allWords.postValue(words);
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println("Reading all words from database");
-                    }
-                });
-            }
+            handler.post(() -> System.out.println("Reading all words from database"));
         });
     }
 
@@ -96,7 +78,7 @@ public class ItemViewModel extends ViewModel {
         executorService.execute(() -> {
             wordDao.updateWord(word);
             handler.post(() -> {
-                System.out.println("Updating word in database");
+                System.out.println("Updating word to database");
                 System.out.println(word.toString());
             });
         });
@@ -105,19 +87,12 @@ public class ItemViewModel extends ViewModel {
     public void deleteWordInBackground(Word word) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                wordDao.deleteWord(word);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println("Deleted word from database");
-                        System.out.println(word.toString());
-                    }
-                });
-            }
+        executorService.execute(() -> {
+            wordDao.deleteWord(word);
+            handler.post(() -> {
+                System.out.println("Deleted word from database");
+                System.out.println(word.toString());
+            });
         });
     }
-
 }

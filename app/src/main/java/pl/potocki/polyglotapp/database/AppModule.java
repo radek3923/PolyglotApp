@@ -21,7 +21,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public AppDatabase providesDatabase(Application application){
+    public AppDatabase providesDatabase(Application application) {
         return AppDatabase.getInstance(application.getApplicationContext());
     }
 }

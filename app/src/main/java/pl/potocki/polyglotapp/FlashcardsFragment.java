@@ -3,41 +3,32 @@ package pl.potocki.polyglotapp;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
-
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import pl.potocki.polyglotapp.communicate.ItemViewModel;
-import pl.potocki.polyglotapp.database.AppDatabase;
-import pl.potocki.polyglotapp.database.Word;
-import pl.potocki.polyglotapp.database.WordDao;
-import pl.potocki.polyglotapp.databinding.FragmentFlashcardsBinding;
-import pl.potocki.polyglotapp.model.flashcards.Flashcard;
 import pl.potocki.polyglotapp.api.deepL.DeepLApi;
 import pl.potocki.polyglotapp.api.deepL.DeepLApiService;
-import pl.potocki.polyglotapp.model.language.SelectedLanguages;
-import pl.potocki.polyglotapp.model.translation.TranslationResponse;
 import pl.potocki.polyglotapp.api.randomWord.RandomWordApi;
 import pl.potocki.polyglotapp.api.randomWord.RandomWordApiService;
+import pl.potocki.polyglotapp.communicate.ItemViewModel;
+import pl.potocki.polyglotapp.database.Word;
+import pl.potocki.polyglotapp.databinding.FragmentFlashcardsBinding;
+import pl.potocki.polyglotapp.model.flashcards.Flashcard;
+import pl.potocki.polyglotapp.model.language.SelectedLanguages;
+import pl.potocki.polyglotapp.model.translation.TranslationResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,7 +38,6 @@ public class FlashcardsFragment extends Fragment {
     private FragmentFlashcardsBinding binding;
     private ItemViewModel viewModel;
     private SelectedLanguages selectedLanguages;
-
 
     private boolean isOnWordSide = true;
     private Animator flipLeftHalfAnimator;
@@ -79,53 +69,37 @@ public class FlashcardsFragment extends Fragment {
 
         System.out.println(selectedLanguages.getSourceLanguage().getName());
 
-        binding.cardContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isOnWordSide) {
-                    flipOnTranslateSide();
-                    isOnWordSide = false;
-                    System.out.println("Strona fiszki z tłumaczeniem");
-                } else {
-                    flipOnWordSide();
-                    isOnWordSide = true;
-                    System.out.println("Strona fiszki bez tłumaczenia");
-                }
+        binding.cardContainer.setOnClickListener(v -> {
+            if (isOnWordSide) {
+                flipOnTranslateSide();
+                isOnWordSide = false;
+                System.out.println("Turning flashcard on translated side");
+            } else {
+                flipOnWordSide();
+                isOnWordSide = true;
+                System.out.println("Turning flashcard on not translated side");
             }
         });
 
-
         binding.seeMyWordsButtonFlashcards.setOnClickListener(v -> {
-
-
             NavHostFragment.findNavController(FlashcardsFragment.this)
                     .navigate(R.id.action_FlashcardsFragment_to_allWordsFragment);
         });
 
-        binding.yesButtonFlashcards.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Word word = new Word(flashcards.get(currentFlashcardIndex).getWordTargetLanguage(),
-                        selectedLanguages.getTargetLanguage().getLanguage(),
-                        true);
-                viewModel.addWordInBackground(word);
-
-                showNextWord();
-                System.out.println("Klikam Tak");
-            }
+        binding.yesButtonFlashcards.setOnClickListener(v -> {
+            Word word = new Word(flashcards.get(currentFlashcardIndex).getWordTargetLanguage(),
+                    selectedLanguages.getTargetLanguage().getLanguage(),
+                    true);
+            viewModel.addWordInBackground(word);
+            showNextWord();
         });
 
-        binding.noButtonFlashcards.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Word word = new Word(flashcards.get(currentFlashcardIndex).getWordTargetLanguage(),
-                        selectedLanguages.getTargetLanguage().getLanguage(),
-                        false);
-                viewModel.addWordInBackground(word);
-
-                showNextWord();
-                System.out.println("Klikam Nie");
-            }
+        binding.noButtonFlashcards.setOnClickListener(v -> {
+            Word word = new Word(flashcards.get(currentFlashcardIndex).getWordTargetLanguage(),
+                    selectedLanguages.getTargetLanguage().getLanguage(),
+                    false);
+            viewModel.addWordInBackground(word);
+            showNextWord();
         });
     }
 
@@ -139,8 +113,8 @@ public class FlashcardsFragment extends Fragment {
             }
         } else {
             currentFlashcardIndex = 0;
+            System.out.println("Starting generating new words");
             generateRandomWords();
-            System.out.println("Skończyły się wygenerowane słowa. Tutaj trzeba pewnie wygenerować nowe");
         }
     }
 
@@ -179,7 +153,7 @@ public class FlashcardsFragment extends Fragment {
     public void generateRandomWords() {
         RandomWordApiService randomWordApiService = RandomWordApi.getRetrofitInstance().create(RandomWordApiService.class);
         Call<String[]> call = randomWordApiService.getRandomWords(10);
-        call.enqueue(new Callback<String[]>() {
+        call.enqueue(new Callback<>() {
 
             @Override
             public void onResponse(@NonNull Call<String[]> call, @NonNull Response<String[]> response) {
@@ -194,7 +168,6 @@ public class FlashcardsFragment extends Fragment {
 
             @Override
             public void onFailure(Call<String[]> call, Throwable t) {
-                System.out.println("Bład przy losowaniu słow");
                 t.printStackTrace();
             }
         });
@@ -226,7 +199,7 @@ public class FlashcardsFragment extends Fragment {
                 .collect(Collectors.toList());
 
         Call<TranslationResponse> callToTranslateInTargetLanguage = deepLApiService.getTranslatedText(wordsToTranslate, selectedLanguages.getTargetLanguage().getLanguage());
-        callToTranslateInTargetLanguage.enqueue(new Callback<TranslationResponse>() {
+        callToTranslateInTargetLanguage.enqueue(new Callback<>() {
 
             @Override
             public void onResponse(Call<TranslationResponse> call, Response<TranslationResponse> response) {
@@ -243,15 +216,13 @@ public class FlashcardsFragment extends Fragment {
 
 
         Call<TranslationResponse> callToTranslateInSourceLanguage = deepLApiService.getTranslatedText(wordsToTranslate, selectedLanguages.getSourceLanguage().getLanguage());
-        callToTranslateInSourceLanguage.enqueue(new Callback<TranslationResponse>() {
+        callToTranslateInSourceLanguage.enqueue(new Callback<>() {
 
             @Override
-            public void onResponse(Call<TranslationResponse> call, Response<TranslationResponse> response) {
+            public void onResponse(@NonNull Call<TranslationResponse> call, @NonNull Response<TranslationResponse> response) {
                 TranslationResponse translationResponse = (TranslationResponse) response.body();
                 IntStream.range(0, flashcards.size())
                         .forEach(i -> flashcards.get(i).setWordSourceLanguage(translationResponse.getTranslations().get(i).getText()));
-
-                System.out.println("Ustawiam piersze słowo na: " + flashcards.get(currentFlashcardIndex).getWordSourceLanguage());
                 setFlashcardText(flashcards.get(currentFlashcardIndex).getWordSourceLanguage());
             }
 

@@ -24,15 +24,4 @@ public interface DeepLApiService {
             @Field("text") List<String> text,
             @Field("target_lang") String targetLang
     );
-
-//    @Headers("Authorization: DeepL-Auth-Key 9da9efe1-47a9-3c46-a204-8a99cc511512:fx")
-//    @FormUrlEncoded
-//    @POST("translate")
-//    Call<TranslationResponse> getTranslatedText(
-//            @Field("text") String text,
-//            @Field("source_lang") String sourceLang,
-//            @Field("target_lang") String targetLang
-//    );
-
-
 }

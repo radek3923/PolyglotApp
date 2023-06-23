@@ -28,7 +28,6 @@ public class WordAdapter extends ArrayAdapter<Word> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
         }
-
         TextView textViewName = convertView.findViewById(android.R.id.text1);
         Word word = words.get(position);
         textViewName.setText(word.getWordContent());
