@@ -20,13 +20,23 @@ import pl.potocki.polyglotapp.model.language.SelectedLanguages;
 
 @HiltViewModel
 public class ItemViewModel extends ViewModel {
+    private final WordDao wordDao;
     private final MutableLiveData<SelectedLanguages> selectedItem = new MutableLiveData<>();
     private MutableLiveData<List<Word>> allWords = new MutableLiveData<>();
-    private final WordDao wordDao;
+
+    private MutableLiveData<String> cityFromGps = new MutableLiveData<>();
 
     @Inject
     public ItemViewModel(WordDao wordDao) {
         this.wordDao = wordDao;
+    }
+
+    public void setCityFromGps(String s) {
+        cityFromGps.setValue(s);
+    }
+
+    public LiveData<String> getCityFromGps(){
+        return cityFromGps;
     }
 
     public void setData(SelectedLanguages selectedLanguages) {

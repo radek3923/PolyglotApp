@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -33,28 +34,48 @@ import pl.potocki.polyglotapp.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CODE = 123;
-
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
-
     private ItemViewModel viewModel;
+    private boolean isLocationReceived = false;
 
-    private final LocationListener locationListener = location -> {
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
+    private final LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            if (!isLocationReceived) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
 
-        Geocoder geocoder = new Geocoder(MainActivity.this);
-        try {
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            if (addresses.size() > 0) {
-                String city = addresses.get(0).getLocality();
-                runOnUiThread(() -> {
+                Geocoder geocoder = new Geocoder(MainActivity.this);
+                try {
+                    List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                    if (addresses.size() > 0) {
+                        String city = addresses.get(0).getLocality();
+                        runOnUiThread(() -> {
+                            Log.d("Location", "Ustawiam miasto na " + city);
+                            viewModel.setCityFromGps(city);
+                        });
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                    System.out.println("My city" + city);
-                });
+                isLocationReceived = true;
+                // Możesz również zatrzymać nasłuchiwanie aktualizacji lokalizacji tutaj
+                stopLocationUpdates();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
         }
     };
 
@@ -82,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getSelectedItem().observe(this, item -> {
             //here
         });
-
     }
 
     @Override
@@ -115,6 +135,13 @@ public class MainActivity extends AppCompatActivity {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             }
+        }
+    }
+
+    private void stopLocationUpdates() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager != null) {
+            locationManager.removeUpdates(locationListener);
         }
     }
 
