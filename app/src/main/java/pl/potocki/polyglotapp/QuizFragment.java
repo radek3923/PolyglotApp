@@ -120,9 +120,16 @@ public class QuizFragment extends Fragment {
     }
 
 
-    private void setWordDefinition(String word) {
+    private void setWordDefinition(List<String> words) {
         WordDefinitionsApiService wordDefinitionsApiService = WordDefinitionsApi.getRetrofitInstance().create(WordDefinitionsApiService.class);
-        Call<WordDefinitions> call = wordDefinitionsApiService.getWordDefinitions(word);
+
+        Random random = new Random();
+        correctAnswerIndex = random.nextInt(4);
+
+        String correctWord = words.get(correctAnswerIndex);
+
+        System.out.println("Correct Word :" + correctWord);
+        Call<WordDefinitions> call = wordDefinitionsApiService.getWordDefinitions(correctWord);
         call.enqueue(new Callback<WordDefinitions>() {
 
             @Override
@@ -132,7 +139,8 @@ public class QuizFragment extends Fragment {
 
 
                 if (wordDefinitions == null) {
-                    System.out.println("To jest nullem");
+                    System.out.println("Ta Definicja jest nullem");
+                    generateRandomWords();
                     return;
                 }
                 List<Definition> definitions = wordDefinitions.getDefinitions().stream()
@@ -140,12 +148,15 @@ public class QuizFragment extends Fragment {
                         .collect(Collectors.toList());
 
                 if (!definitions.isEmpty()) {
-                    binding.question.setText(definitions.get(0).getDefinition());
+//                    binding.question.setText(definitions.get(0).getDefinition());
+                    translateGeneratedWords(words, definitions.get(0).getDefinition());
                 } else {
                     if (!wordDefinitions.getDefinitions().isEmpty()) {
-                        binding.question.setText(wordDefinitions.getDefinitions().get(0).getDefinition());
+//                        binding.question.setText(wordDefinitions.getDefinitions().get(0).getDefinition());
+                        translateGeneratedWords(words, wordDefinitions.getDefinitions().get(0).getDefinition());
                     }
                 }
+
             }
 
             @Override
@@ -164,7 +175,7 @@ public class QuizFragment extends Fragment {
             public void onResponse(@NonNull Call<String[]> call, @NonNull Response<String[]> response) {
                 assert response.body() != null;
                 words = Arrays.asList(response.body());
-                translateGeneratedWords(words);
+                setWordDefinition(words);
             }
 
             @Override
@@ -175,10 +186,13 @@ public class QuizFragment extends Fragment {
         });
     }
 
-    private void translateGeneratedWords(List<String> wordsToTranslate) {
+    private void translateGeneratedWords(List<String> wordsToTranslate, String definition) {
         DeepLApiService deepLApiService = DeepLApi.getRetrofitInstance().create(DeepLApiService.class);
 
-        Call<TranslationResponse> callToTranslateInTargetLanguage = deepLApiService.getTranslatedText(wordsToTranslate, selectedLanguages.getTargetLanguage().getLanguage());
+        List<String> translatedWords = new ArrayList<>(wordsToTranslate);
+        translatedWords.add(definition);
+
+        Call<TranslationResponse> callToTranslateInTargetLanguage = deepLApiService.getTranslatedText(translatedWords, selectedLanguages.getTargetLanguage().getLanguage());
         callToTranslateInTargetLanguage.enqueue(new Callback<TranslationResponse>() {
 
             @Override
@@ -189,7 +203,11 @@ public class QuizFragment extends Fragment {
                         .map(Translation::getText)
                         .collect(Collectors.toList());
 
-                setWordsAsQuestion(words);
+                binding.ansA.setText(words.get(0));
+                binding.ansB.setText(words.get(1));
+                binding.ansC.setText(words.get(2));
+                binding.ansD.setText(words.get(3));
+                binding.question.setText(words.get(4));
             }
 
             @Override
@@ -197,17 +215,5 @@ public class QuizFragment extends Fragment {
 
             }
         });
-    }
-
-    private void setWordsAsQuestion(List<String> words) {
-        Random random = new Random();
-        correctAnswerIndex = random.nextInt(4);
-
-        binding.ansA.setText(words.get(0));
-        binding.ansB.setText(words.get(1));
-        binding.ansC.setText(words.get(2));
-        binding.ansD.setText(words.get(3));
-
-        setWordDefinition(words.get(correctAnswerIndex));
     }
 }
