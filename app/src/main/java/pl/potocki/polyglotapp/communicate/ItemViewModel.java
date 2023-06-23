@@ -93,14 +93,26 @@ public class ItemViewModel extends ViewModel {
     public void updateWordInBackground(Word word) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
+        executorService.execute(() -> {
+            wordDao.updateWord(word);
+            handler.post(() -> {
+                System.out.println("Updating word in database");
+                System.out.println(word.toString());
+            });
+        });
+    }
+
+    public void deleteWordInBackground(Word word) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                wordDao.updateWord(word);
+                wordDao.deleteWord(word);
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("Updating word in database");
+                        System.out.println("Deleted word from database");
                         System.out.println(word.toString());
                     }
                 });
