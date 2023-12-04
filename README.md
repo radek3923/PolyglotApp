@@ -28,7 +28,7 @@ PolyglotApp utilizes the following key technologies and architectural components
 
 - `Room Database`: The app incorporates the Room persistence library for local storage and management of word data. It includes an abstract class AppDatabase that extends RoomDatabase and provides access to the WordDao interface for performing database operations.
 
-- `Dagger Hilt`: ependency injection is implemented using Dagger Hilt, allowing for efficient and modular development of the application.
+- `Dagger Hilt`: dependency injection is implemented using Dagger Hilt, allowing for efficient and modular development of the application.
 
 - `Location Services`: The app utilizes the Android LocationManager and LocationListener to obtain the user's current location coordinates. It then uses Geocoder to retrieve the corresponding city name through reverse geocoding.
 
